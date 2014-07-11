@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/action_preferences"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_preferences"/>
+    <item
+        android:id="@+id/action_collectionSearch"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="Collection Search"/>
+    <item
+        android:id="@+id/action_location_map"
+        android:icon="@drawable/maps_icon"
+        android:showAsAction="ifRoom"
+        android:title="maps"/>
+    <item
+        android:id="@+id/action_list_view"
+        android:icon="@drawable/list_icon"
+        android:showAsAction="ifRoom"
+        android:title="listview"/>
+
+</menu>

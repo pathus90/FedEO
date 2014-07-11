@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SpacebelMobile</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splah">SplahActivity</string>
+    <string name="loading">Loading</string>
+    <string name="title_activity_osm_main">MainActivity</string>
+    <string name="action_preferences">Preferences</string>
+    <string name="collection">Dataset Series :</string>
+    <string name="startDate">Start :</string>
+    <string name="EndDate">End :</string>
+    <string name="search">Search</string>
+    <string name="image">"calendar logo"</string>
+    <string name="dates">11-11-2013</string>
+    <string name="dateE">11-01-2014</string>
+    <string name="title">Title</string>
+    <string name="published_date">Publishe ddate</string>
+    <string name="updatedate">Update date</string>
+    <string name="todo">TODO</string>
+    <string name="title_activity_collection_search">Dataset Series Search</string>
+    <string name="title_activity_search_collections_results">Dataset Series Result</string>
+    <string name="searchresults">Search results</string>
+    <string name="pagination">(20 of 140)</string>
+    <string name="next">next</string>
+    <string name="prev">prev</string>
+    <string name="medium_text">Medium Text</string>
+    <string name="date">Date :</string>
+    <string name="organisationname">Organisation Name:</string>
+    <string name="largetext">aa</string>
+    <string name="description">Description :</string>
+    <string name="addtolist">Add to Series list</string>
+    <string name="textview">TextView</string>
+    <string name="title_activity_application_main">MetaData</string>
+    <string name="generalinformation">General Information</string>
+
+    <!-- MetaData -->
+    <string name="metadata">Meta Data</string>
+    <string name="topiccategory">Topic Category</string>
+    <string name="HierarchieLevel">Hierarchie Level</string>
+    <string name="FileIdentifier">FileIdentifier</string>
+    <string name="ResourceInformation">Resource Information</string>
+    <string name="AdministrativeArea">AdministrativeArea</string>
+    <string name="identificationinformation">Identification Information</string>
+    <string name="contacts">contacts</string>
+    <string name="metadataStandardVersion">Meta Data Standar dVersion</string>
+    <string name="metadataStandardName">Meta Data Standard Name</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="IndividualName">Individual Name</string>
+    <string name="OrganisationName">Organisation Name</string>
+    <string name="City">City</string>
+    <string name="Role">Role</string>
+    <string name="PositionName">Position name</string>
+    <string name="Email">E-mail</string>
+    <string name="Tel">Tel</string>
+    <string name="Fax">Fax</string>
+    <string name="PostalCode">PostalCode</string>
+    <string name="id">Id</string>
+    <string name="identifier">Identifier</string>
+    <string name="bstract">Abstract</string>
+    <string name="date_">Date :</string>
+    <string name="raduis">Raduis</string>
+    <string name="city">City</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="CityandRaduis">City and Raduis</string>
+    <string name="shortname">ShortName</string>
+    <string name="SerialIdentifier">SerialIdentifier:</string>
+    <string name="OrbiteType">Orbit Type:</string>
+    <string name="orbityDirection">Orbit Direction:</string>
+    <string name="boundingbox">Bounding Box</string>
+    <string name="location">Location</string>
+    <string name="search_by">Search By :</string>
+    <string name="title_activity_list_details_collection">DetailsMetaData</string>
+    <string name="title_activity_dash_board">DashBoardActivity</string>
+    <string name="title_activity_end_point">EndPointActivity</string>
+    <string name="title_activity_product_details">ProductDetailsActivity</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
+    <string name="deliverypoint">Delivery Point</string>
+    <string name="facsimile">Facsimile</string>
+    <string name="phone">Phone</string>
+    <string name="searchTerms">Search Terms</string>
+    <string name="subject">Subject</string>
+
+</resources>
