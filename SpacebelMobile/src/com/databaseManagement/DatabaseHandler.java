@@ -16,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	//Database Version
 	private static final int DATABASE_VERSION = 1;
 	//Database Name
-	private static final String DATABASE_NAME = "favouriteCollections";
+	private static final String DATABASE_NAME = "favouriteCollection";
 	//CollectionsTable table name
 	private static final String TABLE_COLLECTIONS = "collections";
 	//Collections Table Columns names
