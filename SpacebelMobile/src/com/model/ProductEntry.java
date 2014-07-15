@@ -2,6 +2,7 @@ package com.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import android.graphics.Bitmap;
 /**
  * Entry class representing an atom entry
@@ -10,18 +11,29 @@ import android.graphics.Bitmap;
  */
 public class ProductEntry implements Serializable
 {
-
-	private static final long serialVersionUID = 607473294731406930L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4140023801030846331L;
+	/**
+	 * 
+	 */
 	private String id;
 	private String link;
 	private String published;
 	private String title;
+	//StartDate
+	private String StartDate;
+	private String EndDate;
 	private String updated;
+	//Acquisition
 	private String OrbitNumber;
 	private String OrbitDirection;
 	private String LastOrbitreNumber;
-	private String StartDate;
-	private String EndDate;
+	private String illuminationAzimuthAngle;
+	private String illuminationElevationAngle;
+	private String incidenceAngle;
+	//
 	private String ShortName;
 	private String SerialIdentifier;
 	private String OrbiteType;
@@ -35,7 +47,7 @@ public class ProductEntry implements Serializable
 	private String PolarisationChannels;
 	private String AntenaLookDirection;
 	private String MinimumIncidentAngle;
-	//image thumbnail
+	//image thumbnail        -
 	private String thumbnail;
 	private Bitmap bitmapThumbnail;
 	//imageQuickLook
@@ -286,6 +298,22 @@ public class ProductEntry implements Serializable
 	public void setLastOrbitreNumber(String lastOrbitreNumber) {
 		LastOrbitreNumber = lastOrbitreNumber;
 	}
+	public void setIlluminationAzimuthAngle(String illuminationAzimuthAngle) {
+		this.illuminationAzimuthAngle = illuminationAzimuthAngle;
+	}
+	public String getIlluminationElevationAngle() {
+		return illuminationElevationAngle;
+	}
+	public void setIlluminationElevationAngle(String illuminationElevationAngle) {
+		this.illuminationElevationAngle = illuminationElevationAngle;
+	}
+	public String getIncidenceAngle() {
+		return incidenceAngle;
+	}
+	public void setIncidenceAngle(String incidenceAngle) {
+		this.incidenceAngle = incidenceAngle;
+	}
+
 	public String getPolarisationMode() {
 		return PolarisationMode;
 	}
@@ -357,5 +385,8 @@ public class ProductEntry implements Serializable
 	}
 	public void setBitmapQuicklook(Bitmap bitmapQuicklook) {
 		this.bitmapQuicklook = bitmapQuicklook;
+	}
+	public String getIlluminationAzimuthAngle() {
+		return illuminationAzimuthAngle;
 	}
 }

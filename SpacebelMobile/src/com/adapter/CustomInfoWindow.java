@@ -42,14 +42,14 @@ public class CustomInfoWindow implements InfoWindowAdapter
 		TextView shortname=(TextView)view.findViewById(R.id.snippet);
 		TextView serialNumber=(TextView)view.findViewById(R.id.serialIdentifier);
 		TextView orbitType=(TextView)view.findViewById(R.id.orbiteType);
-		TextView orbityDirection=(TextView)view.findViewById(R.id.orbitDirection);
+		TextView orbitDirection=(TextView)view.findViewById(R.id.orbitDirection);
 		//set data in widgets
 		imageView.setImageBitmap(entry.getBitmapThumbnail());
 		title.setText(entry.getTitle());
 		shortname.setText(entry.getShortName());
 		serialNumber.setText(entry.getSerialIdentifier());
 		orbitType.setText(entry.getOrbiteType());
-		orbityDirection.setText(entry.getOrbitDirection());
+		orbitDirection.setText(entry.getIncidenceAngle());
 		return view;
 	}
 }

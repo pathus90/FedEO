@@ -19,6 +19,7 @@ import com.fragment.RaduisDialogFragment;
 import com.fragment.DatePickerFragment.OnCalendarChangedListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.internal.in;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -186,7 +187,7 @@ OnDragListener
 				dialog.show();
 				return true;
 			}
-		});
+		}); 
 		mListViewCollection.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id)
@@ -197,7 +198,7 @@ OnDragListener
 				bundle.putSerializable("collection", collection);
 				intent.putExtras(bundle);
 				startActivity(intent);
-			}
+			} 
 		});
 		//search choice
 		buttonBySearch=(RadioGroup)findViewById(R.id.radioSearch);
@@ -217,7 +218,7 @@ OnDragListener
 				case R.id.radioButton2:
 					final GPSTracker gps = new GPSTracker(MainActivity.this);
 					RaduisDialogFragment raduisDialogFragment=new RaduisDialogFragment();
-					raduisDialogFragment.show(getSupportFragmentManager(), "Raduis");
+					raduisDialogFragment.show(getSupportFragmentManager(), "Radius");
 					raduisDialogFragment.setListener(new Localisation() 
 					{
 						@Override
@@ -272,6 +273,7 @@ OnDragListener
 					break;
 				}
 			}
+
 		});
 		//get next and previous button
 		next=(Button)findViewById(R.id.next);
@@ -340,6 +342,20 @@ OnDragListener
 				}
 			}
 		});
+		mListViewProduct.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				ProductEntry product = (ProductEntry) mListViewProduct.getItemAtPosition(position);
+				Intent intent =new Intent(MainActivity.this,ProductDetailsActivity.class);
+				Bundle bundle=new Bundle();
+				bundle.putSerializable("entry", product);
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+		});
 		//next products to be display
 		next.setOnClickListener(new OnClickListener()
 		{
@@ -377,10 +393,14 @@ OnDragListener
 		// Get boundaries of the screen from the projection
 		VisibleRegion bounds = googleMap.getProjection().getVisibleRegion();
 		//getting the smallest visible map area.....
-		LatLng sw =  bounds.latLngBounds.southwest;
-		LatLng ne=bounds.latLngBounds.northeast;
-		this.bound=sw.longitude+","+sw.latitude+","+ ne.longitude+","+ne.latitude;
-		drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
+
+		double n = bounds.latLngBounds.northeast.latitude;
+		double e = bounds.latLngBounds.northeast.longitude;
+		double s = bounds.latLngBounds.southwest.latitude;
+		double w = bounds.latLngBounds.southwest.longitude;
+
+		this.bound=w+","+s+","+ e+","+n;
+		//drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
 		//googleMap.animateCamera(CameraUpdateFactory.zoomBy(ZOOM_OUT));
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
 		return bound;
@@ -564,7 +584,7 @@ OnDragListener
 				builder.include(m.getPosition());
 				Log.i("map",""+MarkerEntry.size());
 				//}
-			
+
 			}
 			//Then obtain a movement description object by using the factory: CameraUpdateFactory:
 			int padding = 0; // offset from edges of the map in pixels
@@ -596,9 +616,10 @@ OnDragListener
 		// TODO Auto-generated method stub
 		//getting the cliquable entry
 		ProductEntry entry=MarkerEntry.get(marker);
+		Intent intent = new Intent(MainActivity.this, ProductDetailsActivity.class);
 		Bundle bundle = new Bundle();  
 		bundle.putSerializable("entry", entry);
-		Intent intent = new Intent(MainActivity.this, ProductDetailsActivity.class);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 	@Override
@@ -639,7 +660,7 @@ OnDragListener
 		top = (int) c1.longitude;
 		right = (int)c3.latitude;
 		bottom = (int) c3.longitude;
-		bound=""+left+","+top+","+right+","+bottom;
+		bound=""+bottom+","+right+","+top+","+left;
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
 		//Top left marker
 		if (m1 != null) m1.remove();
@@ -768,50 +789,40 @@ OnDragListener
 			feed=DataParser.parse(urls[0]);
 			//converting url to bitmap
 			for (ProductEntry entry : feed.getEntries()) {
+				//Parsing url-->Bitmap
 				String imageURLThumbnail = entry.getThumbnail();
 				String imageURLQuickLook=entry.getQuicklook();
 				Bitmap bitmapTN = ImageDownloader.downloadAndShowImage(imageURLThumbnail);
 				Bitmap bitmapQL = ImageDownloader.downloadAndShowImage(imageURLQuickLook);
-				/*BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-				bmOptions.inSampleSize = 1;
-				try {
-					bitmapTN = BitmapFactory.decodeStream(new URL(imageURLThumbnail).openStream(),
-							null, bmOptions);
-					bitmapQL = BitmapFactory.decodeStream(new URL(imageURLQuickLook).openStream(),
-							null, bmOptions);
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}*/
+
 				//passing bitmap to the 
 				entry.setBitmapThumbnail(bitmapTN);
 				entry.setBitmapQuicklook(bitmapQL);
+				}
+				return feed;
 			}
-			return feed;
+		}
+		@Override
+		public void onLocationChanged(Location location) 
+		{
+			// TODO Auto-generated method stub
+			// Creating a LatLng object for the current location
+			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+			// Showing the current location in Google Map
+			googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+			// Zoom in the Google Map
+			googleMap.animateCamera(CameraUpdateFactory.zoomTo(8));
+		}
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+		}
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+		}
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
 		}
 	}
-	@Override
-	public void onLocationChanged(Location location) 
-	{
-		// TODO Auto-generated method stub
-		// Creating a LatLng object for the current location
-		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-		// Showing the current location in Google Map
-		googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-		// Zoom in the Google Map
-		googleMap.animateCamera(CameraUpdateFactory.zoomTo(8));
-	}
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-	}
-}

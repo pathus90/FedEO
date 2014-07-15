@@ -60,11 +60,11 @@
     <string name="identifier">Identifier</string>
     <string name="bstract">Abstract</string>
     <string name="date_">Date :</string>
-    <string name="raduis">Raduis</string>
+    <string name="raduis">Radius</string>
     <string name="city">City</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="CityandRaduis">City and Raduis</string>
+    <string name="CityandRaduis">City and Radius</string>
     <string name="shortname">ShortName</string>
     <string name="SerialIdentifier">SerialIdentifier:</string>
     <string name="OrbiteType">Orbit Type:</string>

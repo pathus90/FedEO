@@ -9,7 +9,23 @@ import java.util.ArrayList;
  */
 public class Product implements Serializable
 {
-	private static final long serialVersionUID = 7307778749820640358L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	
+	/**
+	 * 
+	 */
+	
+	/**
+	 * 
+	 */
+
 	private String totalsResults;
 	private String name;
 	private String updated; 

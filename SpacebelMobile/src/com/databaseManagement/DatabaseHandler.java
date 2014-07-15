@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.CollectionEntry;
+import com.utils.Utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,8 +35,10 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db) 
 	{
 		// TODO Auto-generated method stub
-		String CREATE_COLLECTIONS_TABLE = "CREATE TABLE " + TABLE_COLLECTIONS + "("
-				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
+		String CREATE_COLLECTIONS_TABLE = "CREATE TABLE " 
+				+ TABLE_COLLECTIONS + "("
+				+ KEY_ID + " INTEGER PRIMARY KEY," 
+				+ KEY_TITLE + " TEXT,"
 				+ KEY_IDENTIFIER + " TEXT" + ")";
 		db.execSQL(CREATE_COLLECTIONS_TABLE);
 	}
@@ -44,19 +47,22 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	{
 		// TODO Auto-generated method stub
 		// Drop older table if existed
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLLECTIONS);
+		db.execSQL("DROP TABLE IF EXISTS "
+					+ TABLE_COLLECTIONS);
 		// Create tables again
 		onCreate(db);
 	}
 	/**
-	 * All CRUD(Create, Read, Update, Delete) Operations
+	 * thiis fonction will add a collection in the Database
+	 * @param collection
 	 */
 	public void addCollection(CollectionEntry collection) 
 	{
+		
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE, collection.getTitle()); 
-		values.put(KEY_IDENTIFIER,collection.getIdentifier()); 
+		values.put(KEY_IDENTIFIER,Utils.ParseCollectionIdentifier(collection.getIdentifier())); 
 		db.insert(TABLE_COLLECTIONS, null, values);
 		db.close(); 
 	}
@@ -65,7 +71,11 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	public boolean containsCollection(CollectionEntry collection)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
-		String selectQuery ="SELECT  * FROM " + TABLE_COLLECTIONS +" WHERE "+KEY_IDENTIFIER+" =?";
+		String selectQuery ="SELECT  * FROM " 
+							+ TABLE_COLLECTIONS 
+							+" WHERE "
+							+KEY_IDENTIFIER	
+							+" =?";
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{collection.getIdentifier()});
 		if (!cursor.moveToFirst()) //no record exist
 		{
@@ -93,7 +103,8 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	public List<CollectionEntry> getAllCollections() 
 	{
 		List<CollectionEntry> collections = new ArrayList<CollectionEntry>();
-		String selectQuery = "SELECT  * FROM " + TABLE_COLLECTIONS;
+		String selectQuery = "SELECT  * FROM " 
+							 + TABLE_COLLECTIONS;
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		if (cursor.moveToFirst()) {

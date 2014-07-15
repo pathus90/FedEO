@@ -17,7 +17,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:adjustViewBounds="true"
-            android:background="@drawable/satellite"
             android:contentDescription="@string/image"
             android:padding="4dp" >
         </ImageView>

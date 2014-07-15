@@ -208,6 +208,8 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
+		//StartDate ans
+		//Acquisition node
 		if (qName.equalsIgnoreCase("eop:lastOrbitNumber"))
 		{
 			if (this.isEntry && this.isAcquisition)
@@ -222,6 +224,31 @@ public class ProductHandler extends DefaultHandler
 			{
 				this.entry.setOrbitDirection(this.tempVal.toString());
 				this.tempVal=null;
+			}
+		}
+		if (qName.equalsIgnoreCase("eop:illuminationAzimuthAngle "))
+		{
+			if (this.isEntry && this.isAcquisition)
+			{
+				this.entry.setIlluminationAzimuthAngle(this.tempVal.toString());
+				this.tempVal=null;
+			}
+		}
+		if (qName.equalsIgnoreCase("eop:illuminationElevationAngle"))
+		{
+			if (this.isEntry && this.isAcquisition)
+			{
+				this.entry.setIlluminationElevationAngle(this.tempVal.toString());
+				this.tempVal=null;
+			}
+		}
+		if (qName.equalsIgnoreCase("eop:incidenceAngle"))
+		{
+			if (this.isEntry && this.isAcquisition)
+			{
+				this.entry.setIncidenceAngle(this.tempVal.toString());
+				this.tempVal=null;
+				Log.i("incidenceAngle", entry.getIncidenceAngle());
 			}
 		}
 		if (qName.equalsIgnoreCase("sar:polarisationMode"))
