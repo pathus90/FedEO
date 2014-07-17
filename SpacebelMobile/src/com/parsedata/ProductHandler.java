@@ -37,11 +37,8 @@ public class ProductHandler extends DefaultHandler
 	//quicklook and thumbnail parsing
 	private boolean isMediaGroup;
 	private String url;
-	//polygon georss;
-	private boolean isLinearing=false;
 	private Pos pos;
 	private ArrayList<Pos>Linear;
-	private boolean isPos=false;
 	private boolean isCenterOf;
 
 	public ProductHandler() {
@@ -51,20 +48,7 @@ public class ProductHandler extends DefaultHandler
 	{
 		return feed;
 	}
-	@Override
-	public void processingInstruction(String target, String data)
-			throws SAXException {
-		// TODO Auto-generated method stub
-		super.processingInstruction(target, data);
-	}
-	public void startDocument() throws SAXException
-	{
-		super.startDocument();
-	}
-	public void endDocument()throws SAXException
-	{
-		super.endDocument();
-	}
+	
 	public void startElement(String uri, String localName, String qName,Attributes attributes) throws SAXException
 	{
 		tempVal=new StringBuffer();
@@ -92,21 +76,21 @@ public class ProductHandler extends DefaultHandler
 			Log.i("previous", attributes.getValue("href"));
 		}
 		// platform node starting
-		if (qName.equalsIgnoreCase("eop:Platform"))
+		if (localName.equalsIgnoreCase("Platform"))
 		{
 			this.isPlatform=true;
 		}
 		// instrument node starting
-		if (qName.equalsIgnoreCase("eop:Instrument"))
+		if (localName.equalsIgnoreCase("Instrument"))
 		{
 			this.isInstrument=true;
 		}
 		//sensor node starting
-		if (qName.equalsIgnoreCase("eop:Sensor"))
+		if (localName.equalsIgnoreCase("Sensor"))
 		{
 			this.isSensor=true;
 		}
-		if (qName.equalsIgnoreCase("sar:Acquisition"))
+		if (localName.equalsIgnoreCase("Acquisition"))
 		{
 			this.isAcquisition=true;
 		}
@@ -126,13 +110,11 @@ public class ProductHandler extends DefaultHandler
 		if (qName.equalsIgnoreCase("LinearRing"))
 		{
 			Linear=new ArrayList<Pos>();
-			this.isLinearing=true;
 
 		}
 		if (qName.equalsIgnoreCase("pos"))
 		{
-			pos=new Pos();
-			this.isPos=true;	
+			pos=new Pos();	
 		}
 		//polygon
 		if (qName.equalsIgnoreCase("eop:centerOf"))
@@ -192,7 +174,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:orbitType"))
+		if (localName.equalsIgnoreCase("orbitType"))
 		{
 			if (this.isEntry && this.isPlatform)
 			{
@@ -200,7 +182,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:orbitNumber"))
+		if (localName.equalsIgnoreCase("orbitNumber"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -210,7 +192,7 @@ public class ProductHandler extends DefaultHandler
 		}
 		//StartDate ans
 		//Acquisition node
-		if (qName.equalsIgnoreCase("eop:lastOrbitNumber"))
+		if (localName.equalsIgnoreCase("lastOrbitNumber"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -218,7 +200,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:orbitDirection"))
+		if (localName.equalsIgnoreCase("orbitDirection"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -226,7 +208,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:illuminationAzimuthAngle "))
+		if (localName.equalsIgnoreCase("illuminationAzimuthAngle "))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -234,7 +216,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:illuminationElevationAngle"))
+		if (localName.equalsIgnoreCase("illuminationElevationAngle"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -242,7 +224,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:incidenceAngle"))
+		if (localName.equalsIgnoreCase("incidenceAngle"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -251,7 +233,7 @@ public class ProductHandler extends DefaultHandler
 				Log.i("incidenceAngle", entry.getIncidenceAngle());
 			}
 		}
-		if (qName.equalsIgnoreCase("sar:polarisationMode"))
+		if (localName.equalsIgnoreCase("polarisationMode"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -259,7 +241,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("sar:polarisationChannels"))
+		if (localName.equalsIgnoreCase("polarisationChannels"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -267,7 +249,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("sar:antennaLookDirection"))
+		if (localName.equalsIgnoreCase("antennaLookDirection"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -275,7 +257,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("sar:minimumIncidenceAngle"))
+		if (localName.equalsIgnoreCase("minimumIncidenceAngle"))
 		{
 			if (this.isEntry && this.isAcquisition)
 			{
@@ -284,7 +266,7 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//Intrument 
-		if (qName.equalsIgnoreCase("eop:Instrument"))
+		if (localName.equalsIgnoreCase("shortName"))
 		{
 			if (this.isEntry && this.isInstrument)
 			{
@@ -293,7 +275,7 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//Sensor
-		if (qName.equalsIgnoreCase("eop:sensorType"))
+		if (localName.equalsIgnoreCase("sensorType"))
 		{
 			if (this.isEntry && this.isSensor)
 			{
@@ -301,7 +283,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:operationalMode"))
+		if (localName.equalsIgnoreCase("operationalMode"))
 		{
 			if (this.isEntry && this.isSensor)
 			{
@@ -309,7 +291,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:resolution"))
+		if (localName.equalsIgnoreCase("resolution"))
 		{
 			if (this.isEntry && this.isSensor)
 			{
@@ -317,7 +299,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("eop:swathIdentifier"))
+		if (localName.equalsIgnoreCase("swathIdentifier"))
 		{
 			if (this.isEntry && this.isSensor)
 			{
@@ -326,7 +308,7 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//StartDate and endDate
-		if (qName.equalsIgnoreCase("gml:beginPosition"))
+		if (localName.equalsIgnoreCase("beginPosition"))
 		{
 			if (this.isEntry)
 			{
@@ -334,7 +316,7 @@ public class ProductHandler extends DefaultHandler
 				this.tempVal=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("gml:endPosition"))
+		if (localName.equalsIgnoreCase("endPosition"))
 		{
 			if (this.isEntry)
 			{
@@ -343,9 +325,9 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//pos node 
-		if (qName.equalsIgnoreCase("pos")||qName.equalsIgnoreCase("coordinates"))
+		if (localName.equalsIgnoreCase("pos")||localName.equalsIgnoreCase("coordinates"))
 		{
-			//we have the coordinante of the center of the polygon
+			//we have the polygon's coordinante  center
 			if (this.isEntry && isCenterOf)
 			{
 				Pos pos=new Pos();
@@ -354,7 +336,6 @@ public class ProductHandler extends DefaultHandler
 				pos.setLongitude(latlong[1]);
 				this.entry.setCenterOf(pos);
 				this.isCenterOf=false;
-				this.isPos=false;
 				this.tempVal=null;
 			}
 		}
@@ -362,53 +343,53 @@ public class ProductHandler extends DefaultHandler
 		{
 			if (this.isEntry)
 			{
-				String [] polygone=this.tempVal.toString().split(" ");
+				String [] polygon=this.tempVal.toString().split(" ");
 				ArrayList<Pos>mListPos=new ArrayList<Pos>();
-				for (int k = 0; k < polygone.length ; k = k + 2) 
+				for (int k = 0; k < polygon.length ; k = k + 2) 
 				{
 					Pos pos=new Pos();
-					pos.setLatitude(polygone[k]);
-					pos.setLongitude(polygone[k+1]);
+					pos.setLatitude(polygon[k]);
+					pos.setLongitude(polygon[k+1]);
 					mListPos.add(pos);
 				}
-				this.entry.setPos(mListPos);
+				this.entry.setPolygon(mListPos);
 				this.tempVal=null;
 			}
 		}
 		//End of feed
-		if (qName.equalsIgnoreCase("feed"))
+		if (localName.equalsIgnoreCase("feed"))
 		{
 			this.feed.setEntries(entries);
 		}
 		//totals results
-		if (qName.equalsIgnoreCase("os:totalResults"))
+		if (localName.equalsIgnoreCase("totalResults"))
 		{
 			this.feed.setTotalsResults(this.tempVal.toString());
 		}
 		//End of an Entry 
-		if (qName.equalsIgnoreCase("Entry"))
+		if (localName.equalsIgnoreCase("Entry"))
 		{
 			this.entries.add(entry);
 			this.isEntry=false;
 			this.entry=null;
 		}
 		//End of an eop:platform 
-		if (qName.equalsIgnoreCase("eop:Platform"))
+		if (localName.equalsIgnoreCase("Platform"))
 		{
 			this.isPlatform=false;
 		}
 		//End of an eop:Instrument
-		if (qName.equalsIgnoreCase("eop:Instrument"))
+		if (localName.equalsIgnoreCase("Instrument"))
 		{
 			this.isInstrument=false;
 		}
 		//End of an eop:Sensor
-		if (qName.equalsIgnoreCase("eop:Sensor"))
+		if (localName.equalsIgnoreCase("Sensor"))
 		{
 			this.isSensor=false;
 		}
 		//End of an eop:Sensor
-		if (qName.equalsIgnoreCase("sar:Acquisition"))
+		if (localName.equalsIgnoreCase("Acquisition"))
 		{
 			this.isAcquisition=false;
 		}
@@ -430,12 +411,12 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//end of Linearing polygon
-		if (qName.equalsIgnoreCase("LinearRing"))
+	/*	if (qName.equalsIgnoreCase("LinearRing"))
 		{
 			this.isLinearing=false;
-			this.entry.setPos(Linear);
+			this.entry.setPolygon(Linear);
 			this.Linear=null;
-		}
+		}*/
 	}
 	public void characters(char[] ch, int start, int length)throws SAXException  
 	{

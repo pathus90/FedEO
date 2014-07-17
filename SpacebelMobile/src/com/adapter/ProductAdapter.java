@@ -56,9 +56,9 @@ public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 	}
 	private  class Holder
 	{
-		TextView title;
+		TextView title,platformShortName,SensorResolutiion,startDate,endDate;
 		TextView orbittype;
-		TextView serialNumber;
+		TextView sensortype;
 		TextView orbitNumber;	
 		TextView serialIdentifier;
 		TextView orbitDirection;
@@ -68,29 +68,40 @@ public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 		ImageView productImage;
 		public Holder(View view)
 		{
-			title=(TextView)view.findViewById(R.id.legendName);
-			productImage=(ImageView)view.findViewById(R.id.image);
-			
-			orbittype=(TextView)view.findViewById(R.id.textView1);
-			serialNumber=(TextView)view.findViewById(R.id.textView2);
-			orbitNumber=(TextView)view.findViewById(R.id.textView3);
-			serialIdentifier=(TextView)view.findViewById(R.id.textView4);
-			instrumentShortName=(TextView)view.findViewById(R.id.TextView05);
-			sensorOperationMode=(TextView)view.findViewById(R.id.TextView06);
-			LastOrbitNumber=(TextView)view.findViewById(R.id.TextView07);
+			title=(TextView)view.findViewById(R.id.ltitle);
+			productImage=(ImageView)view.findViewById(R.id.lbadge);
+			platformShortName=(TextView)view.findViewById(R.id.lsnippet);
+			orbittype=(TextView)view.findViewById(R.id.lorbiteType);
+			serialIdentifier=(TextView)view.findViewById(R.id.lserialIdentifier);
+			orbitNumber=(TextView)view.findViewById(R.id.lOrbitNumber);
+			sensortype=(TextView)view.findViewById(R.id.lsensorType);
+			SensorResolutiion=(TextView)view.findViewById(R.id.lsensorResolution);
+			instrumentShortName=(TextView)view.findViewById(R.id.linstrumentShortName);
+			sensorOperationMode=(TextView)view.findViewById(R.id.lsensorOperationalMode);
+			LastOrbitNumber=(TextView)view.findViewById(R.id.llastOrbitNumber);
+			orbitDirection=(TextView)view.findViewById(R.id.lorbitDirection);
+			startDate=(TextView)view.findViewById(R.id.lstartDate);
+			endDate=(TextView)view.findViewById(R.id.lendDate);
 		}
 		public void setEntry(ProductEntry product)
 		{
+			productImage.setImageBitmap(product.getBitmapThumbnail());
 			title.setText(Utils.ParseCollectionIdentifier(product.getTitle()));
+			
 			orbittype.setText(product.getOrbiteType());
-			serialNumber.setText(product.getSensorType());
+			sensortype.setText(product.getSensorType());
 			orbitNumber.setText(product.getOrbitNumber());
 			serialIdentifier.setText(product.getSerialIdentifier());
-			//orbitDirection.setText(product.getOrbitDirection());
+			
 			instrumentShortName.setText(product.getInstrumentShortName());
-			sensorOperationMode.setText(product.getSensorOperationalMode());
-			//	LastOrbitNumber.setText(product.getLastOrbitreNumber());
-			productImage.setImageBitmap(product.getBitmapThumbnail());
+		    sensorOperationMode.setText(product.getSensorOperationalMode());
+		    orbitDirection.setText(product.getOrbitDirection());
+		    LastOrbitNumber.setText(product.getLastOrbitreNumber());
+		    platformShortName.setText(product.getShortName());
+		    SensorResolutiion.setText(product.getSensorResolution());
+		    startDate.setText(product.getStartDate().replaceAll("\\s", ""));
+		    endDate.setText(product.getEndDate().replaceAll("\\s", ""));
+			
 		}
 	}
 }

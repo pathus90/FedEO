@@ -4,11 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <org.osmdroid.views.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mapviewos"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true" />
+
 
 </LinearLayout>

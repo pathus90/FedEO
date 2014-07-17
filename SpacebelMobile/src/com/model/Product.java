@@ -9,7 +9,6 @@ import java.util.ArrayList;
  */
 public class Product implements Serializable
 {
-	
 	/**
 	 * 
 	 */
@@ -18,14 +17,6 @@ public class Product implements Serializable
 	 * 
 	 */
 	
-	/**
-	 * 
-	 */
-	
-	/**
-	 * 
-	 */
-
 	private String totalsResults;
 	private String name;
 	private String updated; 

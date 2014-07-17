@@ -1,221 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="5dip" >
 
-    <LinearLayout
-        android:id="@+id/thumbnail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="5dip"
-        android:padding="3dip" >
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="80dip"
-            android:layout_height="80dip" />
-    </LinearLayout>
-
     <TextView
-        android:id="@+id/legendName"
+        android:id="@+id/ltitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:text=""
-        android:textColor="#040404"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="sans" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="45dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/arrow"
+        android:layout_marginLeft="2dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="eeeeeeeeeeeeeeeee"
+        android:textColor="#598e96"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/legendName"
-        android:layout_below="@+id/legendName"
-        android:orientation="vertical" >
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
 
-        <TextView
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="86dp"
+            android:layout_marginRight="5dp"
+            android:adjustViewBounds="true"
+            android:padding="6dp" >
+
+            <ImageView
+                android:id="@+id/lbadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
+                android:padding="4dp" >
+            </ImageView>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="@string/OrbiteType"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
+            android:orientation="vertical" >
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Platform Short Name:"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Platform Serial Identifier"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Platform Orbit Type"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sensor Resolution"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sensor Type"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sensor Operational Mode"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Serial Identifier :"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical" >
 
-        <TextView
+            <TextView
+                android:id="@+id/lsnippet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lserialIdentifier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lorbiteType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lsensorResolution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lsensorType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lsensorOperationalMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Orbit Number:"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical" >
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Orbit Number"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orbit Direction"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orbit Number"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Instrument Short Name"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Sensor Type:"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lstartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lendDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/llastOrbitNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lorbitDirection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/lOrbitNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/linstrumentShortName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/linearLayout2"
-        android:layout_toRightOf="@+id/linearLayout2"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="TextView"
-            android:textSize="15dip" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="TextView"
-            android:textSize="15dip" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="TextView"
-            android:textSize="15dip" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="TextView"
-            android:textSize="15dip" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/linearLayout1"
-        android:layout_marginLeft="59dp"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Instrument Short Name :"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sensor Operational Mode :"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Orbit Direction :"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:text="Last Orbit Number :"
-            android:textColor="#343434"
-            android:textSize="15dip"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/LinearLayout01"
-        android:layout_toRightOf="@+id/LinearLayout01"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/TextView05"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="2dp"
-            android:textSize="15dip" />
-
-    </LinearLayout>
-    <TextView
-        android:id="@+id/TextView06"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/LinearLayout02"
-        android:layout_toRightOf="@+id/LinearLayout01"
-        android:text="TextView"
-        android:textSize="15dip" />
-
-    <TextView
-        android:id="@+id/TextView07"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextView06"
-        android:layout_toRightOf="@+id/LinearLayout01"
-        android:text="TextView07"
-        android:textSize="15dip" />
-
-    <TextView
-        android:id="@+id/TextView02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/LinearLayout01"
-        android:layout_alignRight="@+id/TextView01"
-        android:layout_toRightOf="@+id/LinearLayout01"
-        android:text="TextView"
-        android:textSize="15dip" />
-
-</RelativeLayout>
+</LinearLayout>

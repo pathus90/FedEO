@@ -1,18 +1,15 @@
 package com.spacebelmobile;
 
-import com.interfaces.SendProduct;
-import com.model.CollectionEntry;
 import com.model.ProductEntry;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ProductDetailsActivity extends Activity implements SendProduct{
+public class ProductDetailsActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -20,8 +17,8 @@ public class ProductDetailsActivity extends Activity implements SendProduct{
 		super.onCreate(savedInstanceState);
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#598e96")));
 		setContentView(R.layout.activity_product_details);
-		//Bundle bundle=getIntent().getExtras();
-		//ProductEntry entry=(ProductEntry)bundle.getSerializable("entry");
+		Bundle bundle=getIntent().getExtras();
+		ProductEntry entry=(ProductEntry)bundle.getSerializable("entry");
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -42,9 +39,5 @@ public class ProductDetailsActivity extends Activity implements SendProduct{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	@Override
-	public void Send(ProductEntry entry) {
-		// TODO Auto-generated method stub
-		Log.i("entry",""+entry.getShortName());
-	}
+	
 }

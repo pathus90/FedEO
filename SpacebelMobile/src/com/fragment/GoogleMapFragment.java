@@ -142,9 +142,9 @@ public class GoogleMapFragment extends SupportMapFragment
 	public ArrayList<LatLng>PolygonPos(ProductEntry entry)
 	{
 		ArrayList<LatLng> arrayPoints = new ArrayList<LatLng>();
-		for (int i=0;i<entry.getPos().size();i++)
+		for (int i=0;i<entry.getPolygon().size();i++)
 		{
-			Pos pos=entry.getPos().get(i);
+			Pos pos=entry.getPolygon().get(i);
 			LatLng latLng=new LatLng(Double.parseDouble(pos.getLatitude()), Double.parseDouble(pos.getLongitude()));
 			arrayPoints.add(latLng);
 		}

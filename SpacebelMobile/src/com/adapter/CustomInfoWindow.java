@@ -1,9 +1,11 @@
 package com.adapter;
 
+import java.security.acl.LastOwnerException;
 import java.util.Map;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,15 +43,38 @@ public class CustomInfoWindow implements InfoWindowAdapter
 		TextView title=(TextView)view.findViewById(R.id.title);
 		TextView shortname=(TextView)view.findViewById(R.id.snippet);
 		TextView serialNumber=(TextView)view.findViewById(R.id.serialIdentifier);
+		
 		TextView orbitType=(TextView)view.findViewById(R.id.orbiteType);
-		TextView orbitDirection=(TextView)view.findViewById(R.id.orbitDirection);
+		TextView orbitDirection=(TextView)view.findViewById(R.id.worbitDirection);
+		TextView orbitNumber=(TextView)view.findViewById(R.id.wOrbitNumber);
+		TextView lastorbitNumber=(TextView)view.findViewById(R.id.wlastOrbitNumber);
+		
+		TextView sensorType=(TextView)view.findViewById(R.id.sensorType);
+		TextView sensorMode=(TextView)view.findViewById(R.id.wsensorOperationalMode);
+		TextView sensorResolution=(TextView)view.findViewById(R.id.sensorResolution);
+		TextView startDate=(TextView)view.findViewById(R.id.wstartDate);
+		TextView endDate=(TextView)view.findViewById(R.id.wendDate);
+		TextView instrumentShortName=(TextView)view.findViewById(R.id.winstrumentShortName);
+		
 		//set data in widgets
 		imageView.setImageBitmap(entry.getBitmapThumbnail());
 		title.setText(entry.getTitle());
 		shortname.setText(entry.getShortName());
+		
 		serialNumber.setText(entry.getSerialIdentifier());
+		instrumentShortName.setText(entry.getInstrumentShortName());
+		sensorResolution.setText(entry.getSensorResolution());
+		sensorType.setText(entry.getSensorType());
+		sensorMode.setText(entry.getSensorOperationalMode());
+		
+		orbitDirection.setText(entry.getOrbitDirection());
+		lastorbitNumber.setText(entry.getLastOrbitreNumber());
+		orbitNumber.setText(entry.getOrbitNumber());
 		orbitType.setText(entry.getOrbiteType());
-		orbitDirection.setText(entry.getIncidenceAngle());
+		
+		startDate.setText(entry.getStartDate().replaceAll("\\s", ""));
+		endDate.setText(entry.getEndDate().replaceAll("\\s", ""));
+		
 		return view;
 	}
 }

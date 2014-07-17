@@ -143,7 +143,7 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 			}
 			else
 			{
-				imageOrganisationName.setImageResource(Color.parseColor("#80000000"));
+				//imageOrganisationName.setImageResource(Color.parseColor("#80000000"));
 			}
 		}
 		public TextView getButtonAddListCollection()

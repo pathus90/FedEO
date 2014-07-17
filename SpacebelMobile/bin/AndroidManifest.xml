@@ -85,10 +85,6 @@
             android:label="@string/title_activity_application_main" >
         </activity>
         <activity
-            android:name="com.spacebelmobile.ListDetailsCollection"
-            android:label="@string/title_activity_list_details_collection" >
-        </activity>
-        <activity
             android:name="com.spacebelmobile.DashBoardActivity"
             android:label="@string/title_activity_dash_board" >
         </activity>

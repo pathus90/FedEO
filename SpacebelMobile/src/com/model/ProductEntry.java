@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 /**
  * Entry class representing an atom entry
  * @author mpo
  *
  */
-public class ProductEntry implements Serializable
+public class ProductEntry implements Parcelable
 {
 	/**
 	 * 
@@ -60,6 +62,52 @@ public class ProductEntry implements Serializable
 	public ProductEntry()
 	{
 		super();
+	}
+	public ProductEntry(String id, String link, String published, String title,
+			String startDate, String endDate, String updated,
+			String orbitNumber, String orbitDirection,
+			String lastOrbitreNumber, String illuminationAzimuthAngle,
+			String illuminationElevationAngle, String incidenceAngle,
+			String shortName, String serialIdentifier, String orbiteType,
+			String instrumentShortName,String sensorType,
+			String sensorOperationalMode, String sensorResolution,
+			String swathIdentifier, String polarisationMode,
+			String polarisationChannels, String antenaLookDirection,
+			String minimumIncidentAngle, String thumbnail,
+			Bitmap bitmapThumbnail, Bitmap bitmapQuicklook, String quicklook,
+			ArrayList<Pos> pos, Pos centerOf) {
+		super();
+		this.id = id;
+		this.link = link;
+		this.published = published;
+		this.title = title;
+		StartDate = startDate;
+		EndDate = endDate;
+		this.updated = updated;
+		OrbitNumber = orbitNumber;
+		OrbitDirection = orbitDirection;
+		LastOrbitreNumber = lastOrbitreNumber;
+		this.illuminationAzimuthAngle = illuminationAzimuthAngle;
+		this.illuminationElevationAngle = illuminationElevationAngle;
+		this.incidenceAngle = incidenceAngle;
+		ShortName = shortName;
+		SerialIdentifier = serialIdentifier;
+		OrbiteType = orbiteType;
+		InstrumentShortName = instrumentShortName;
+		SensorType = sensorType;
+		SensorOperationalMode = sensorOperationalMode;
+		SensorResolution = sensorResolution;
+		SwathIdentifier = swathIdentifier;
+		PolarisationMode = polarisationMode;
+		PolarisationChannels = polarisationChannels;
+		AntenaLookDirection = antenaLookDirection;
+		MinimumIncidentAngle = minimumIncidentAngle;
+		this.thumbnail = thumbnail;
+		this.bitmapThumbnail = bitmapThumbnail;
+		this.bitmapQuicklook = bitmapQuicklook;
+		Quicklook = quicklook;
+		this.pos = pos;
+		this.centerOf = centerOf;
 	}
 	/**
 	 * 
@@ -362,10 +410,10 @@ public class ProductEntry implements Serializable
 	public void setQuicklook(String quicklook) {
 		Quicklook = quicklook;
 	}
-	public ArrayList<Pos> getPos() {
+	public ArrayList<Pos> getPolygon() {
 		return pos;
 	}
-	public void setPos(ArrayList<Pos> pos) {
+	public void setPolygon(ArrayList<Pos> pos) {
 		this.pos = pos;
 	}
 	public Pos getCenterOf() {
@@ -389,4 +437,58 @@ public class ProductEntry implements Serializable
 	public String getIlluminationAzimuthAngle() {
 		return illuminationAzimuthAngle;
 	}
+	//
+	public int describeContents() {
+		return 0;
+	}
+
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(id);
+		
+	}
+
+	public static final Parcelable.Creator<ProductEntry> CREATOR
+	= new Parcelable.Creator<ProductEntry>() {
+		public ProductEntry createFromParcel(Parcel in) {
+			return new ProductEntry(in);
+		}
+
+		public ProductEntry[] newArray(int size) {
+			return new ProductEntry[size];
+		}
+	};
+
+	private ProductEntry(Parcel in) {
+		this.id = in.readString();
+		this.link=in.readString();
+		link=in.readString();
+		published=in.readString();
+		title=in.readString();
+		updated=in.readString();
+		OrbitNumber=in.readString();
+		OrbitDirection=in.readString();
+		LastOrbitreNumber=in.readString();
+		StartDate=in.readString();
+		EndDate=in.readString();
+		ShortName=in.readString();
+		SerialIdentifier=in.readString();
+		OrbiteType=in.readString();
+		InstrumentShortName=in.readString();
+		SensorType=in.readString();
+		SensorOperationalMode=in.readString();
+		SensorResolution=in.readString();
+		SwathIdentifier=in.readString();
+		//Sensing information 
+		PolarisationMode=in.readString();
+		PolarisationChannels=in.readString();
+		AntenaLookDirection=in.readString();
+		MinimumIncidentAngle=in.readString();
+		//image thumbnail
+		thumbnail=in.readString();
+		bitmapThumbnail=(Bitmap) in.readValue(Bitmap.class.getClassLoader());
+		bitmapQuicklook=(Bitmap) in.readValue(Bitmap.class.getClassLoader());
+	//	Quicklook=in.readString();
+	
+	}
+
 }

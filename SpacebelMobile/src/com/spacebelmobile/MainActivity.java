@@ -306,8 +306,6 @@ OnDragListener
 		mSearch=(Button)findViewById(R.id.button1);
 		mSearch.setOnClickListener(new OnClickListener()
 		{
-
-
 			@SuppressLint("SimpleDateFormat") @Override
 			public void onClick(View v) 
 			{
@@ -319,13 +317,13 @@ OnDragListener
 					Date endDate = sdf.parse(mEnddate.getText().toString());
 					if(startDate.compareTo(endDate)>0)
 					{
-						mEnddate.setError("start date");
+						mEnddate.setError("EndDate must be greater than StartDate");
 					}
 					else
 					{
 						mEnddate.setError(null);
 						queryMaker.add(Constant.HTTP_ACCEPT_PARAM,Constant.ATOM_MIME_TYPE);
-						queryMaker.add(Constant.PARENT_IDENTIFIER, "EOP:SPOT:ALL");
+						queryMaker.add(Constant.PARENT_IDENTIFIER,"EOP:SPOT:MULTISPECTRAL_10m");
 						queryMaker.add(Constant.START_DATE,mStartdate.getText().toString());
 						queryMaker.add(Constant.END_DATE,mEnddate.getText().toString());
 						queryMaker.add(Constant.BBOX_PARAM,bound);
@@ -343,16 +341,15 @@ OnDragListener
 			}
 		});
 		mListViewProduct.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
 				ProductEntry product = (ProductEntry) mListViewProduct.getItemAtPosition(position);
 				Intent intent =new Intent(MainActivity.this,ProductDetailsActivity.class);
-				Bundle bundle=new Bundle();
-				bundle.putSerializable("entry", product);
-				intent.putExtras(bundle);
+			//	Bundle bundle=new Bundle();
+				//bundle.putSerializable("entry", product);
+				//intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
@@ -393,13 +390,11 @@ OnDragListener
 		// Get boundaries of the screen from the projection
 		VisibleRegion bounds = googleMap.getProjection().getVisibleRegion();
 		//getting the smallest visible map area.....
-
-		double n = bounds.latLngBounds.northeast.latitude;
-		double e = bounds.latLngBounds.northeast.longitude;
-		double s = bounds.latLngBounds.southwest.latitude;
-		double w = bounds.latLngBounds.southwest.longitude;
-
-		this.bound=w+","+s+","+ e+","+n;
+		double north = bounds.latLngBounds.northeast.latitude;
+		double east = bounds.latLngBounds.northeast.longitude;
+		double south = bounds.latLngBounds.southwest.latitude;
+		double west = bounds.latLngBounds.southwest.longitude;
+		this.bound=west+","+south+","+ east+","+north;
 		//drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
 		//googleMap.animateCamera(CameraUpdateFactory.zoomBy(ZOOM_OUT));
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
@@ -414,7 +409,8 @@ OnDragListener
 	}
 	//validating a date
 	@Override
-	public void setDate(int year, int month, int day) {
+	public void setDate(int year, int month, int day) 
+	{
 		// TODO Auto-generated method stub
 		String date=year+"-"+month+"-"+day;
 		Log.i("date", date);
@@ -492,7 +488,7 @@ OnDragListener
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		// TODO Auto-generated method stub
-		switch (item.getItemId()) 
+		switch (item.getItemId())
 		{
 		case R.id.action_preferences:
 			mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
@@ -567,15 +563,13 @@ OnDragListener
 				// Getting the longitude of the polygon cente²r
 				lng = entry.getCenterOf().getLongitude();
 				LatLng latLng=new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-				//if (bounds.contains(latLng))
-				//{
 				//drawing the polygon for each entry
 				PolygonOptions polygonOptions = new PolygonOptions();
 				//we get for each entry the polygon points
 				polygonOptions.addAll(getPolygon(entry));
 				polygonOptions.strokeColor(Color.RED);
 				polygonOptions.strokeWidth(3);
-				polygonOptions.fillColor(Color.TRANSPARENT);//0x7F00FF00
+				polygonOptions.fillColor(Color.TRANSPARENT);
 				//adding polygon to the map
 				googleMap.addPolygon(polygonOptions);
 				// Drawing marker on the map and get the marker
@@ -584,7 +578,6 @@ OnDragListener
 				builder.include(m.getPosition());
 				Log.i("map",""+MarkerEntry.size());
 				//}
-
 			}
 			//Then obtain a movement description object by using the factory: CameraUpdateFactory:
 			int padding = 0; // offset from edges of the map in pixels
@@ -592,18 +585,15 @@ OnDragListener
 			//Finally move the map:
 			googleMap.moveCamera(cu);
 			// Moving CameraPosition to last clicked position
-			//	googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))));
-			// Setting the zoom level in the map on last position  is clicked
-			//googleMap.animateCamera(CameraUpdateFactory.zoomTo(Float.parseFloat(zoom)));
 		}
 	}
 	//getting the polygon of each entry
 	public ArrayList<LatLng>getPolygon(ProductEntry entry)
 	{
 		ArrayList<LatLng> arrayPoints = new ArrayList<LatLng>();
-		for (int i=0;i<entry.getPos().size();i++)
+		for (int i=0;i<entry.getPolygon().size();i++)
 		{
-			Pos pos=entry.getPos().get(i);
+			Pos pos=entry.getPolygon().get(i);
 			LatLng latLng=new LatLng(Double.parseDouble(pos.getLatitude()), Double.parseDouble(pos.getLongitude()));
 			arrayPoints.add(latLng);
 		}
@@ -618,8 +608,8 @@ OnDragListener
 		ProductEntry entry=MarkerEntry.get(marker);
 		Intent intent = new Intent(MainActivity.this, ProductDetailsActivity.class);
 		Bundle bundle = new Bundle();  
-		bundle.putSerializable("entry", entry);
-		intent.putExtras(bundle);
+		//bundle.putSerializable("entry", entry);
+		//intent.putExtras(bundle);
 		startActivity(intent);
 	}
 	@Override
@@ -631,7 +621,7 @@ OnDragListener
 	}
 	public void DrawCircle(LatLng point,String radius)
 	{
-		CircleOptions circleOptions = new CircleOptions()
+		 CircleOptions circleOptions = new CircleOptions()
 		.center(point)   //set cenzoomter
 		.radius(Double.parseDouble(radius))   //set radius in km
 		.fillColor(Color.TRANSPARENT)  //default
@@ -791,13 +781,13 @@ OnDragListener
 			for (ProductEntry entry : feed.getEntries()) {
 				//Parsing url-->Bitmap
 				String imageURLThumbnail = entry.getThumbnail();
-				String imageURLQuickLook=entry.getQuicklook();
+				//String imageURLQuickLook=entry.getQuicklook();
 				Bitmap bitmapTN = ImageDownloader.downloadAndShowImage(imageURLThumbnail);
-				Bitmap bitmapQL = ImageDownloader.downloadAndShowImage(imageURLQuickLook);
+				//Bitmap bitmapQL = ImageDownloader.downloadAndShowImage(imageURLQuickLook);
 
 				//passing bitmap to the 
 				entry.setBitmapThumbnail(bitmapTN);
-				entry.setBitmapQuicklook(bitmapQL);
+				//entry.setBitmapQuicklook(bitmapQL);
 				}
 				return feed;
 			}
