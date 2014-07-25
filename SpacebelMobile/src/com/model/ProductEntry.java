@@ -2,16 +2,13 @@ package com.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
 /**
  * Entry class representing an atom entry
  * @author mpo
  *
  */
-public class ProductEntry implements Parcelable
+public class ProductEntry implements Serializable
 {
 	/**
 	 * 
@@ -163,21 +160,18 @@ public class ProductEntry implements Parcelable
 		this.title = title;
 	}
 	/**
-	 * 
 	 * @return updated date
 	 */
 	public String getUpdated() {
 		return updated;
 	}
 	/**
-	 * 
 	 * @param updated
 	 */
 	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
 	/**
-	 * 
 	 * @return the orbit Number
 	 */
 	public String getOrbitNumber() {
@@ -437,58 +431,4 @@ public class ProductEntry implements Parcelable
 	public String getIlluminationAzimuthAngle() {
 		return illuminationAzimuthAngle;
 	}
-	//
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel out, int flags) {
-		out.writeString(id);
-		
-	}
-
-	public static final Parcelable.Creator<ProductEntry> CREATOR
-	= new Parcelable.Creator<ProductEntry>() {
-		public ProductEntry createFromParcel(Parcel in) {
-			return new ProductEntry(in);
-		}
-
-		public ProductEntry[] newArray(int size) {
-			return new ProductEntry[size];
-		}
-	};
-
-	private ProductEntry(Parcel in) {
-		this.id = in.readString();
-		this.link=in.readString();
-		link=in.readString();
-		published=in.readString();
-		title=in.readString();
-		updated=in.readString();
-		OrbitNumber=in.readString();
-		OrbitDirection=in.readString();
-		LastOrbitreNumber=in.readString();
-		StartDate=in.readString();
-		EndDate=in.readString();
-		ShortName=in.readString();
-		SerialIdentifier=in.readString();
-		OrbiteType=in.readString();
-		InstrumentShortName=in.readString();
-		SensorType=in.readString();
-		SensorOperationalMode=in.readString();
-		SensorResolution=in.readString();
-		SwathIdentifier=in.readString();
-		//Sensing information 
-		PolarisationMode=in.readString();
-		PolarisationChannels=in.readString();
-		AntenaLookDirection=in.readString();
-		MinimumIncidentAngle=in.readString();
-		//image thumbnail
-		thumbnail=in.readString();
-		bitmapThumbnail=(Bitmap) in.readValue(Bitmap.class.getClassLoader());
-		bitmapQuicklook=(Bitmap) in.readValue(Bitmap.class.getClassLoader());
-	//	Quicklook=in.readString();
-	
-	}
-
 }

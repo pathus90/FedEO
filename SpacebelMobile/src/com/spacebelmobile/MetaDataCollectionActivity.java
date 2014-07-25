@@ -3,10 +3,13 @@ import com.model.CollectionEntry;
 import com.model.KeyWord;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -60,17 +63,18 @@ public class MetaDataCollectionActivity extends Activity
 		TextView metadataStandard=(TextView)findViewById(R.id.MSN);
 		TextView metadataStandardVersion=(TextView)findViewById(R.id.MSV);
 		TextView languageTextView=(TextView)findViewById(R.id.lng);
-
+        //Responsable contact
 		individualName.setText(mCollection.getContact().getIndividualName());
 		organisationName.setText(mCollection.getContact().getOrganisation());
-		phone.setText(mCollection.getContact().getPhone());
-		facsimile.setText(mCollection.getContact().getFacsimile());
+		phone.setText(mCollection.getContact().getPhone().replaceAll("\\s", ""));
+		facsimile.setText(mCollection.getContact().getFacsimile().replaceAll("\\s", ""));
 		deliveryPoint.setText(mCollection.getContact().getDelivery());
 		city.setText(mCollection.getContact().getCity());
 		postalCode.setText(mCollection.getContact().getCodePostal());
 		country.setText(mCollection.getContact().getCountry());
 		email.setText(mCollection.getContact().getEmail());
 		positionName.setText(mCollection.getContact().getPositionName());
+		//General Information
 		timeStamp.setText(mCollection.getDateStamp());
 		metadataStandard.setText(mCollection.getMetadataStandardName());
 		metadataStandardVersion.setText(mCollection.getMetadataStandardVersion());

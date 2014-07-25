@@ -1,5 +1,6 @@
 package com.spacebelmobile;
 
+import com.interfaces.OnMetadaProduct;
 import com.model.ProductEntry;
 
 import android.app.Activity;
@@ -9,7 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ProductDetailsActivity extends Activity{
+public class ProductDetailsActivity extends Activity implements OnMetadaProduct{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -17,14 +18,12 @@ public class ProductDetailsActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#598e96")));
 		setContentView(R.layout.activity_product_details);
-		Bundle bundle=getIntent().getExtras();
-		ProductEntry entry=(ProductEntry)bundle.getSerializable("entry");
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.product_details, menu);
+		getMenuInflater().inflate(R.menu.product_details,menu);
 		return true;
 	}
 	@Override
@@ -38,6 +37,11 @@ public class ProductDetailsActivity extends Activity{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public void ShowMetada(ProductEntry entry) {
+		// TODO Auto-generated method stub
+		System.out.println(entry.getShortName());
 	}
 	
 }

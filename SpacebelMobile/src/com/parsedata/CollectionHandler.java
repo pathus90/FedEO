@@ -92,7 +92,7 @@ public class CollectionHandler extends DefaultHandler
 			this.isEntry=true;
 		}
 		// Contact
-		else if (qName.equalsIgnoreCase("gmd:pointOfContact"))
+		else if (localName.equalsIgnoreCase("pointOfContact"))
 		{
 			mContact=new PointOfContact();
 			isContact=true;
@@ -106,74 +106,73 @@ public class CollectionHandler extends DefaultHandler
 			keyword=new KeyWord();
 			isKeyWord=true;
 		}
-		else if( qName.equalsIgnoreCase("gmd:individualName"))
+		else if(localName.equalsIgnoreCase("individualName"))
 		{
 			PointOfContact.isIndividualName=true;
 		}
-		else if( qName.equalsIgnoreCase("gmd:organisationName"))
+		else if(localName.equalsIgnoreCase("organisationName"))
 		{
 			PointOfContact.isOrganisation=true;
 		}
-		else if( qName.equalsIgnoreCase("gmd:positionName"))
+		else if(localName.equalsIgnoreCase("positionName"))
 		{
 			PointOfContact.isPositionName=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:voice"))
+		if( localName.equalsIgnoreCase("voice"))
 		{
 			PointOfContact.isPhone=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:facsimile"))
+		if( localName.equalsIgnoreCase("facsimile"))
 		{
 			PointOfContact.isFax=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:deliveryPoint"))
+		if( localName.equalsIgnoreCase("deliveryPoint"))
 		{
 			PointOfContact.isDelivery=true;
 		}
-		if (qName.equalsIgnoreCase("gmd:city"))
+		if (localName.equalsIgnoreCase("city"))
 		{
 			PointOfContact.isCity=true;
 		}
-		if (qName.equalsIgnoreCase("gmd:postalCode"))
+		if (localName.equalsIgnoreCase("postalCode"))
 		{
 			PointOfContact.isCP=true;
 		}
-		if (qName.equalsIgnoreCase("gmd:country"))
+		if (localName.equalsIgnoreCase("country"))
 		{
 			PointOfContact.isCountry=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:electronicMailAddress"))
+		if( localName.equalsIgnoreCase("electronicMailAddress"))
 		{
 			PointOfContact.isEmail=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:CI_RoleCode "))
+		if( localName.equalsIgnoreCase("CI_RoleCode "))
 		{
 			PointOfContact.isRole=true;
 		}
-		if( qName.equalsIgnoreCase("gmd:abstract"))
+		if( localName.equalsIgnoreCase("abstract"))
 		{
 			isAbstract=true;
 		}
-		if (qName.equals("gmd:dateStamp"))
+		if (localName.equals("dateStamp"))
 		{
 			isDateStamp=true;
 		}
-		if  (qName.equalsIgnoreCase("gmd:metadataStandardName"))
+		if  (localName.equalsIgnoreCase("metadataStandardName"))
 		{
 			isMetastandardName=true;
 		}
-		if  (qName.equalsIgnoreCase("gmd:metadataStandardVersion"))
+		if  (localName.equalsIgnoreCase("metadataStandardVersion"))
 		{
 			isMetaDataStandardVersion=true;
 		}
-		if(qName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("next"))
+		if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("next"))
 		{
 			collection.setNext(attributes.getValue("href"));
 		}
-		if(qName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("previous"))
+		if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("previous"))
 		{ 
 			collection.setPrev(attributes.getValue("href"));
-			//System.out.println(collection.getPrevious());
 		}
 	}
 	/**
@@ -242,12 +241,14 @@ public class CollectionHandler extends DefaultHandler
 					this.mContact.setIndividualName(this.buffer.toString());
 					this.buffer=null;
 					PointOfContact.isIndividualName=false;	
+					
 				}
 				else if(PointOfContact.isOrganisation)
 				{
 					this.mContact.setOrganisation(this.buffer.toString());
 					this.buffer=null;
 					PointOfContact.isOrganisation=false;	
+					Log.i("tag", ""+mContact.getOrganisation());
 				}
 				else if(PointOfContact.isPositionName)
 				{
@@ -317,12 +318,12 @@ public class CollectionHandler extends DefaultHandler
 				isMetaDataStandardVersion=false;
 			}
 		}
-		if (qName.equalsIgnoreCase("gmd:pointOfContact"))
+		if (localName.equalsIgnoreCase("pointOfContact"))
 		{
 			this.mCollectionEntry.setContact(mContact);
 			isContact=false;
 		}
-		if (qName.equals("gco:Date"))
+		if (qName.equalsIgnoreCase("gco:Date"))
 		{
 			if (isDateStamp)
 			{
@@ -330,7 +331,7 @@ public class CollectionHandler extends DefaultHandler
 				isDateStamp=false;
 			}
 		}
-		if (qName.equals("gmd:LanguageCode"))
+		if (qName.equalsIgnoreCase("gmd:LanguageCode"))
 		{
 			this.mCollectionEntry.setLanguage(buffer.toString());
 		}

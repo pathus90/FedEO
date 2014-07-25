@@ -271,7 +271,7 @@
                         android:id="@+id/Organisation_Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Organisation Name"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -279,7 +279,7 @@
                         android:id="@+id/IndividualName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Individual Name"
+                        android:text=" "
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -287,7 +287,7 @@
                         android:id="@+id/PostalCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Postal Code"
+                        android:text=" "
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -295,7 +295,7 @@
                         android:id="@+id/deliverypoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delivery Point"
+                        android:text=" "
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -303,7 +303,7 @@
                         android:id="@+id/facsimile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Facsimile"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -311,7 +311,7 @@
                         android:id="@+id/Phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Phone"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -319,7 +319,7 @@
                         android:id="@+id/PositionName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Position Name"
+                        android:text=" "
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -327,7 +327,7 @@
                         android:id="@+id/Country"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Country"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -335,7 +335,7 @@
                         android:id="@+id/City"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="City"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
 
@@ -343,7 +343,7 @@
                         android:id="@+id/Email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="E-mail"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip" />
                 </LinearLayout>

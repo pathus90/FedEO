@@ -1,7 +1,4 @@
 package com.spacebelmobile;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,7 +16,6 @@ import com.fragment.RaduisDialogFragment;
 import com.fragment.DatePickerFragment.OnCalendarChangedListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.internal.in;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,7 +36,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
-import com.interfaces.Localisation;
+import com.interfaces.OnLocalisation;
+import com.interfaces.OnMetadaProduct;
 import com.model.CollectionEntry;
 import com.model.ProductEntry;
 import com.model.Pos;
@@ -48,6 +45,7 @@ import com.model.Product;
 import com.opensearchquery.QueryMaker;
 import com.parsedata.DataParser;
 import com.services.GPSTracker;
+import com.spacebelmobile.BoundingView.OnLatLongBounds;
 import com.spacebelmobile.R;
 import com.tasks.ImageDownloader;
 import com.utils.Constant;
@@ -66,7 +64,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
@@ -80,6 +77,7 @@ import android.view.View.OnDragListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -136,6 +134,9 @@ OnDragListener
 	//queryMaker
 	QueryMaker queryMaker=new QueryMaker();
 	Map<Marker, ProductEntry>MarkerEntry=new HashMap<Marker, ProductEntry>();
+	String collection;
+	//metadaproduct
+	OnMetadaProduct metadaProduct;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -150,12 +151,16 @@ OnDragListener
 		//list of collections
 		handler=new DatabaseHandler(this);
 		mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
-		mListViewCollection=(ListView)findViewById(R.id.productsId);
+		mListViewCollection=(ListView)findViewById(R.id.CollectionId);
 		mListViewProduct=(ListView)findViewById(R.id.listView1);
 		mMapLayout=(LinearLayout)findViewById(R.id.hidegoogleMap);
-
-		mCollectionAdapter=new CollectionListViewAdapter(this, mListCollections);
-		mListViewCollection.setAdapter(mCollectionAdapter);
+        
+		ArrayList<String>listCollection=new ArrayList<String>();
+		for (CollectionEntry collectionEntry : mListCollections) {
+			listCollection.add(collectionEntry.getIdentifier());
+		
+		}
+		mListViewCollection.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listCollection));
 		mListViewCollection.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		mListViewCollection.setOnItemLongClickListener(new OnItemLongClickListener() 
 		{
@@ -170,12 +175,13 @@ OnDragListener
 				dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						CollectionEntry item = (CollectionEntry) mListViewCollection.getItemAtPosition(position);
-						handler.deleteCollection(item);
-						mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
+						String item = (String) mListViewCollection.getItemAtPosition(position);
+						CollectionEntry collectionEntry=new CollectionEntry(item);
+						handler.deleteCollection(collectionEntry);
+						/*mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
 						mCollectionAdapter.clear();
 						mCollectionAdapter.addAll(mListCollections);
-						mCollectionAdapter.notifyDataSetChanged();
+						mCollectionAdapter.notifyDataSetChanged();*/
 					}
 				});
 				dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -192,12 +198,12 @@ OnDragListener
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id)
 			{
-				CollectionEntry collection = (CollectionEntry) mListViewCollection.getItemAtPosition(position);
+				collection = (String) mListViewCollection.getItemAtPosition(position);
 				Intent intent =new Intent(MainActivity.this,MetaDataCollectionActivity.class);
-				Bundle bundle=new Bundle();
-				bundle.putSerializable("collection", collection);
-				intent.putExtras(bundle);
-				startActivity(intent);
+				//Bundle bundle=new Bundle();
+				//bundle.putSerializable("collection", collection);
+				//intent.putExtras(bundle);
+				//startActivity(intent);
 			} 
 		});
 		//search choice
@@ -213,13 +219,32 @@ OnDragListener
 				switch (checkedId) 
 				{
 				case R.id.radioButton1:
-					visibleArea();
+					//visibleArea();
+					 ImageView drawable= (ImageView) findViewById(R.id.bboxImage);
+					 drawable.setVisibility(View.VISIBLE);
+					 BoundingView boundingView=new BoundingView(getApplicationContext(), googleMap);
+					 drawable.setOnTouchListener(boundingView);
+					 boundingView.setOnLatLongBounds(new OnLatLongBounds() {
+						
+						@Override
+						public void setLatLngBegin(LatLng latLng) {
+							// TODO Auto-generated method stub
+							System.out.println(latLng);
+						}
+
+						@Override
+						public void setLatLngEnd(LatLng latLng) {
+							// TODO Auto-generated method stub
+							System.out.println("EndLatLong"+latLng);
+						}
+					});
+					 drawable.bringToFront();
 					break;
 				case R.id.radioButton2:
 					final GPSTracker gps = new GPSTracker(MainActivity.this);
 					RaduisDialogFragment raduisDialogFragment=new RaduisDialogFragment();
-					raduisDialogFragment.show(getSupportFragmentManager(), "Radius");
-					raduisDialogFragment.setListener(new Localisation() 
+					raduisDialogFragment.show(getSupportFragmentManager(),"Radius");
+					raduisDialogFragment.setListener(new OnLocalisation() 
 					{
 						@Override
 						public void sendRaduis(String raduis) 
@@ -255,7 +280,7 @@ OnDragListener
 				case R.id.radioButton3:
 					CityRaduisDialogFragment adressDialogFragment=new CityRaduisDialogFragment();
 					adressDialogFragment.show(getSupportFragmentManager(),"CityRaduis");
-					adressDialogFragment.setListener(new Localisation() {
+					adressDialogFragment.setListener(new OnLocalisation() {
 						@Override
 						public void sendCityAndRaduis(String city, String raduis) 
 						{
@@ -306,6 +331,7 @@ OnDragListener
 		mSearch=(Button)findViewById(R.id.button1);
 		mSearch.setOnClickListener(new OnClickListener()
 		{
+			
 			@SuppressLint("SimpleDateFormat") @Override
 			public void onClick(View v) 
 			{
@@ -323,14 +349,14 @@ OnDragListener
 					{
 						mEnddate.setError(null);
 						queryMaker.add(Constant.HTTP_ACCEPT_PARAM,Constant.ATOM_MIME_TYPE);
-						queryMaker.add(Constant.PARENT_IDENTIFIER,"EOP:SPOT:MULTISPECTRAL_10m");
+						queryMaker.add(Constant.PARENT_IDENTIFIER,collection);
 						queryMaker.add(Constant.START_DATE,mStartdate.getText().toString());
 						queryMaker.add(Constant.END_DATE,mEnddate.getText().toString());
 						queryMaker.add(Constant.BBOX_PARAM,bound);
 						queryMaker.add(Constant.RECORD_SCHEMA_PARAM,Constant.OM_RECORD_SCHEMA);
 						System.out.println(Constant.ENTRY_URL+queryMaker.getQuery().toString().trim());
 						new EntryTask(MainActivity.this).execute(Constant.ENTRY_URL+queryMaker.getQuery().toString());
-						queryMaker.Remove();
+						queryMaker.Remove(); 
 					}
 				} 
 				catch (ParseException e) 
@@ -347,9 +373,10 @@ OnDragListener
 				// TODO Auto-generated method stub
 				ProductEntry product = (ProductEntry) mListViewProduct.getItemAtPosition(position);
 				Intent intent =new Intent(MainActivity.this,ProductDetailsActivity.class);
-			//	Bundle bundle=new Bundle();
-				//bundle.putSerializable("entry", product);
-				//intent.putExtras(bundle);
+			    metadaProduct.ShowMetada(product);
+				//Bundle bundle=new Bundle();
+			    //bundle.putSerializable("entry", product);
+			    //intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
@@ -363,7 +390,7 @@ OnDragListener
 			}
 		});
 		prev.setOnClickListener(new OnClickListener()
-		{
+		{ 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -380,6 +407,10 @@ OnDragListener
 				//visibleArea();      
 			}
 		});
+	}
+	public void setMetadaProduct(OnMetadaProduct onMetadaProduct)
+	{
+		metadaProduct=onMetadaProduct;
 	}
 	/**
 	 * 
@@ -448,7 +479,7 @@ OnDragListener
 							"Sorry! unable to create maps", Toast.LENGTH_SHORT)
 							.show();
 				}
-				else
+				else 
 				{
 					// Changing map type
 					googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -623,7 +654,7 @@ OnDragListener
 	{
 		 CircleOptions circleOptions = new CircleOptions()
 		.center(point)   //set cenzoomter
-		.radius(Double.parseDouble(radius))   //set radius in km
+		.radius(Double.parseDouble(radius)*Constant.KM_TO_M)   //set radius in km
 		.fillColor(Color.TRANSPARENT)  //default
 		.strokeColor(Color.RED)
 		.strokeWidth(5);
@@ -815,4 +846,5 @@ OnDragListener
 		public void onProviderDisabled(String provider) {
 			// TODO Auto-generated method stub
 		}
+		
 	}

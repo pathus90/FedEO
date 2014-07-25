@@ -1,26 +1,33 @@
 package com.spacebelmobile;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
-class BoundingView extends ImageView implements OnClickListener
+class BoundingView extends ImageView implements OnTouchListener 
 { 
 	private boolean isDrawing=false;
-	Point begin,end;
+	Point begin=new Point();
+	Point end=new Point();
 	GoogleMap map;
 	Paint paint=new Paint();
-	public BoundingView(Context context)
+	LatLng latLngE,latLngB;
+	OnLatLongBounds latLongBounds;
+	public BoundingView(Context context,GoogleMap map )
 	{
 		super(context);
+		this.map=map;
+		setWillNotDraw(false);
 	}
 	public BoundingView(Context context, AttributeSet attrs) 
 	{
@@ -30,39 +37,52 @@ class BoundingView extends ImageView implements OnClickListener
 	{
 		switch(event.getAction()) 
 		{
-			case MotionEvent.ACTION_DOWN:
-				isDrawing = true; 
-				begin.x = (int) event.getX();
-				begin.y = (int) event.getY();
-				end.x = (int) event.getX();
-				end.y = (int) event.getY();
-				invalidate(); 
-				break;
+		case MotionEvent.ACTION_DOWN:
+			isDrawing = true; 
+			begin.x = (int) event.getX();
+			begin.y = (int) event.getY();
+			end.x = (int) event.getX();
+			end.y = (int) event.getY();
+			latLongBounds.setLatLngBegin(map.getProjection().fromScreenLocation(begin));
+			invalidate(); 
+			break;
 		case MotionEvent.ACTION_MOVE:
-				end.x = (int) event.getX();
-				end.y = (int) event.getY();
-				invalidate(); 
-				break;
+			isDrawing = true; 
+			end.x = (int) event.getX();
+			end.y = (int) event.getY();
+			latLongBounds.setLatLngEnd(map.getProjection().fromScreenLocation(end));
+			invalidate(); 
+			break;
 		case MotionEvent.ACTION_UP:
-				isDrawing = false; 
-				invalidate(); 
-				Log.d("dd", "msg");	
-				break;
+			isDrawing = false; 
+			invalidate(); 
+			break;
 		}
 		return true;
 	}
 	@Override
 	protected void onDraw(Canvas canvas) 
 	{
-		paint.setColor(Color.RED);
-		paint.setStrokeWidth(3);
-		if(isDrawing) {
-			canvas.drawRect(begin.x, begin.y, end.x, end.y, paint);
-		}
+		Paint p = new Paint();
+		// smooths
+		p.setAntiAlias(true);
+		p.setColor(Color.RED);
+		p.setStyle(Paint.Style.STROKE); 
+		p.setStrokeWidth(4.5f);
+		// opacity
+		//p.setAlpha(0x80); //
+		canvas.drawRect(200, 30, 500, 500, p);
 	}
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
+	public void setOnLatLongBounds(OnLatLongBounds latLongBounds)
+	{
+		this.latLongBounds=latLongBounds;
 	}
-	
+    /*|******************************|
+      |         Inteface bbox        |
+	  |******************************|*/
+	 public interface OnLatLongBounds
+	 {
+		 void setLatLngBegin(LatLng latLng);
+		 void setLatLngEnd(LatLng latLng);
+	 }
 }

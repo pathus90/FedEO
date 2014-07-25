@@ -1,5 +1,5 @@
 package com.fragment;
-import com.interfaces.Localisation;
+import com.interfaces.OnLocalisation;
 import com.spacebelmobile.R;
 
 import android.app.Dialog;
@@ -15,7 +15,7 @@ public class RaduisDialogFragment extends DialogFragment
 {  
 	private Button mButtonOk,mButtonCancel;  
 	private EditText mEditTextRaduis;  
-	Localisation mListener;  
+	OnLocalisation mListener;  
 	String text = "";  
 	@Override  
 	public Dialog onCreateDialog(Bundle savedInstanceState) 
@@ -46,7 +46,7 @@ public class RaduisDialogFragment extends DialogFragment
 		}); 
 		return dialog;  
 	}  
-	public void setListener(Localisation listener)
+	public void setListener(OnLocalisation listener)
 	{
 		this.mListener=listener;
 	}

@@ -1,18 +1,16 @@
 package com.adapter;
 
 import java.util.ArrayList;
-
 import com.model.CollectionEntry;
 import com.spacebelmobile.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
-
 
 public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 {
@@ -20,24 +18,27 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 	private Context context;
 	public CollectionListViewAdapter(Context context,ArrayList<CollectionEntry>entries) 
 	{
+		// TODO Auto-generated constructor stub
 		super(context, R.layout.listviewadapter,entries);
 		this.entries=entries;
-		this.context=context;
-		// TODO Auto-generated constructor stub
+		this.context=context;	
 	}
 	@Override
-	public int getPosition(CollectionEntry item) {
+	public int getPosition(CollectionEntry item) 
+	{
 		// TODO Auto-generated method stub
 		return getPosition(item);
 	}
 	@Override
-	public int getCount() {
+	public int getCount() 
+	{
 		// TODO Auto-generated method stub
 		return entries.size();
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
+		// TODO Auto-generated method stub
 		View view = convertView;
 		Holder holder;
 		if (view == null) 
@@ -54,16 +55,18 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 		holder.setEntry(getItem(position));
 		return view;
 	}
-	public  class Holder
-	{
-		TextView title;
+	public class Holder
+	{ 
+		public RadioButton mRadioBtn;
+		public TextView mTitle;
 		public Holder(View view)
 		{
-			title=(TextView)view.findViewById(R.id.title);
+			mTitle=(TextView)view.findViewById(R.id.title);
+			mRadioBtn=(RadioButton)view.findViewById(R.id.radioButton1);
 		}
 		public void setEntry(CollectionEntry entry)
 		{
-			title.setText(entry.getIdentifier());
+			mTitle.setText( entry.getIdentifier());
 		}
 	}
 }

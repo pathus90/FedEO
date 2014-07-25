@@ -38,6 +38,7 @@ public class ProductHandler extends DefaultHandler
 	private boolean isMediaGroup;
 	private String url;
 	private Pos pos;
+	private boolean isLinearing=false;
 	private ArrayList<Pos>Linear;
 	private boolean isCenterOf;
 
@@ -48,7 +49,6 @@ public class ProductHandler extends DefaultHandler
 	{
 		return feed;
 	}
-	
 	public void startElement(String uri, String localName, String qName,Attributes attributes) throws SAXException
 	{
 		tempVal=new StringBuffer();
@@ -109,6 +109,7 @@ public class ProductHandler extends DefaultHandler
 		//LinearRing node Starting
 		if (qName.equalsIgnoreCase("LinearRing"))
 		{
+			isLinearing=true;
 			Linear=new ArrayList<Pos>();
 
 		}
@@ -230,7 +231,6 @@ public class ProductHandler extends DefaultHandler
 			{
 				this.entry.setIncidenceAngle(this.tempVal.toString());
 				this.tempVal=null;
-				Log.i("incidenceAngle", entry.getIncidenceAngle());
 			}
 		}
 		if (localName.equalsIgnoreCase("polarisationMode"))
@@ -411,12 +411,12 @@ public class ProductHandler extends DefaultHandler
 			}
 		}
 		//end of Linearing polygon
-	/*	if (qName.equalsIgnoreCase("LinearRing"))
+		if (qName.equalsIgnoreCase("LinearRing"))
 		{
 			this.isLinearing=false;
 			this.entry.setPolygon(Linear);
 			this.Linear=null;
-		}*/
+		}
 	}
 	public void characters(char[] ch, int start, int length)throws SAXException  
 	{
