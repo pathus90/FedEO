@@ -7,7 +7,7 @@
     android:padding="5dip" >
 
     <ImageView
-        android:id="@+id/iconorganisation"
+        android:id="@+id/IconOrganisation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -30,6 +30,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +80,7 @@
     <TextView
         android:id="@+id/abstractCollection"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dip"
         android:gravity="left|fill_horizontal"
         android:maxLines="4"
@@ -95,7 +96,7 @@
             android:id="@+id/ButtonAdd"
             style="@style/ButtonAdd"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="30dp"
             android:background="@drawable/buttonbg"
             android:text="Add to list" />
 
@@ -103,11 +104,10 @@
             android:id="@+id/ButtonShowMetaData"
             style="@style/ButtonAdd"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="4dp"
             android:background="@drawable/buttonbg"
             android:text="Show metadata" />
-        
     </LinearLayout>
 
 </LinearLayout>

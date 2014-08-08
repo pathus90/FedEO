@@ -26,7 +26,8 @@ public class Constant {
 	public static final String START_DATE="startDate";
 	public static final String END_DATE="endDate";
 	public static final String PARENT_IDENTIFIER = "parentIdentifier";
-	
+	public  static final String INSTRUMENT = "instrument";
+	public static String PLATFORM="platform";
 	/* urn prefixes */
 	public static String EOP_PREFIX = "EOP:";
 	public static String EOP_LOWER_CASE_PREFIX = "eop:";
@@ -68,7 +69,7 @@ public class Constant {
 	
 	public static String RECORD_SCHEMA_PARAM = "recordSchema";
 	public static String GEONAME_PARAM = "name";
-	public static String SUBJECT_PARAM = "name";
+	public static String SUBJECT_PARAM = "subject";
 	public static String RADIUS_PARAM = "radius";
 	public static String FRAME_PARAM = "frame";
 	public static String ORBIT_NUMBER_PARAM = "orbitNumber";
@@ -81,5 +82,6 @@ public class Constant {
 	
 	/*URL*/
 	public static String ENTRY_URL="http://smaad.spacebel.be/opensearch/request/?";
+	
 }
 

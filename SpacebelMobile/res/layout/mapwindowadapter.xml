@@ -12,7 +12,7 @@
         android:ellipsize="end"
         android:layout_marginLeft="2dp"
         android:singleLine="true"
-        android:text="eeeeeeeeeeeeeeeee"
+        android:text=""
         android:textColor="#598e96"
         android:textSize="14sp"
         android:textStyle="bold" />

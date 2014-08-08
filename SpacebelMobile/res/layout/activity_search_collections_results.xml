@@ -41,35 +41,45 @@
 
         <ListView
             android:id="@+id/listView1"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:divider="#2E9AFE" >
         </ListView>
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
-        android:background="#598e96"
-        android:gravity="bottom" >
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom"
+        android:background="#598e96" >
 
-        <Button
+        <ImageButton
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/next"
-            android:textSize="12sp" />
+            android:src="@drawable/righticon"
+            android:text="@string/next" />
 
-        <Button
+        <ImageButton
             android:id="@+id/prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/prev"
-            android:textSize="12sp" />
+            android:layout_alignTop="@+id/next"
+            android:src="@drawable/lefticon"
+            android:text="prev" />
+
+        <TextView
+            android:id="@+id/countProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="315dp"
+            android:layout_toRightOf="@+id/prev"
+            android:text="" />
     </RelativeLayout>
 
 </LinearLayout>

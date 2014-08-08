@@ -1,7 +1,11 @@
 package com.model;
 
 import java.io.Serializable;
-
+/**
+ * class representing a latitude and longitude of geographic location
+ * @author mpo
+ * @version 1.0
+ */
 public class Pos implements Serializable
 {
 	private static final long serialVersionUID = 6283784474975408307L;
@@ -13,11 +17,12 @@ public class Pos implements Serializable
 	 */
 	public Pos()
 	{
+		super();
 	}
 	/**
 	 * Constructor
-	 * @param lat latitude
-	 * @param lon longitude
+	 * @param latitude latitude
+	 * @param longitude longitude
 	 */
 	public Pos(String latitude,String longitude)
 	{
@@ -56,6 +61,4 @@ public class Pos implements Serializable
 	public String toString() {
 		return "Pos [lat=" + mLatitude + ", lon=" + mLongitude + "]";
 	}
-	
-	
 }

@@ -58,7 +58,7 @@ public class SplahActivity extends Activity
 		protected void onPostExecute(String result) {
 			//TODO Auto-generated method stub
 			super.onPostExecute(result);
-			Intent i=new Intent(getBaseContext(),MainActivity.class);
+			Intent i=new Intent(getBaseContext(),StartActivity.class);
 			Bundle bundle=new Bundle();
 			bundle.putSerializable("url", result);
 			//Log.i("url", result);

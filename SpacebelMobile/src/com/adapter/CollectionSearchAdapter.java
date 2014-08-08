@@ -21,12 +21,11 @@ import android.widget.TextView;
  */
 public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry> 
 {
-
 	OnChooseCollection listener;
 	public interface OnChooseCollection
 	{
 		public void addCollection(CollectionEntry collection);
-		public void showMetaData(CollectionEntry collection);
+		public void showMetaData( CollectionEntry collection);
 	}
 	/**
 	 * Contains the list of objects that represent the data of the collections.
@@ -49,9 +48,6 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 		// TODO Auto-generated method stub
 		return mCollections.size();
 	}
-	/**
-	 * 
-	 */
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		View view = convertView;
@@ -61,12 +57,6 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 			LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.collectioncustomview, parent, false);
 			holder = new Holder(view);
-			holder.mIdentifier=(TextView)view.findViewById(R.id.identifier);
-			holder.mCollectionTitle = (TextView) view.findViewById(R.id.title);
-			holder.mAbstractDescription=(TextView)view.findViewById(R.id.abstractCollection);
-			holder.mButtonAddListCollection=(Button)view.findViewById(R.id.ButtonAdd);
-			holder.mButtonShowMetaData=(Button)view.findViewById(R.id.ButtonShowMetaData);
-			holder.imageOrganisationName=(ImageView)view.findViewById(R.id.iconorganisation);
 			view.setTag(holder);
 		}
 		else
@@ -83,7 +73,6 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 			}
 		});
 		holder.getButtonShowMetaData().setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -91,6 +80,7 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 			}
 		});
 		return view;
+		
 	}
 	public void setOnAddClickedListener(final OnChooseCollection listener) {
 		this.listener = listener;
@@ -100,55 +90,58 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 	 * @author mpo
 	 *
 	 */
-	static class Holder
+	public static class Holder
 	{
-		/**
-		 *
-		 */
 		TextView  mCollectionTitle;
 		TextView  mAbstractDescription;
 		TextView  mIdentifier;
-		Button 	  mButtonAddListCollection;
+		Button 	  mButtonAddtoListCollection;
 		Button    mButtonShowMetaData;
-		ImageView imageOrganisationName;
+		ImageView mImageOrganizationName;
 		public Holder(View view) 
 		{
+			mImageOrganizationName=(ImageView)view.findViewById(R.id.IconOrganisation);
 			mIdentifier=(TextView)view.findViewById(R.id.identifier);
 			mCollectionTitle = (TextView) view.findViewById(R.id.title);
 			mAbstractDescription=(TextView)view.findViewById(R.id.abstractCollection);
-			mButtonAddListCollection=(Button)view.findViewById(R.id.ButtonAdd);
+			mButtonAddtoListCollection=(Button)view.findViewById(R.id.ButtonAdd);
 			mButtonShowMetaData=(Button)view.findViewById(R.id.ButtonShowMetaData);
-			imageOrganisationName=(ImageView)view.findViewById(R.id.iconorganisation);
+			
 		}
 		public void setEntry(CollectionEntry collection)
 		{
 			mCollectionTitle.setText(collection.getTitle());
 			mIdentifier.setText(collection.getIdentifier());
 			mAbstractDescription.setText(collection.getDescription());
+			System.out.println(mCollectionTitle);
 			if (collection.getIdentifier().contains("ESA"))
 			{
-				imageOrganisationName.setImageResource(R.drawable.esa);
+				mImageOrganizationName.setImageResource(R.drawable.esa);
 			}
 			else if (collection.getIdentifier().contains("VITO"))
 			{
-				imageOrganisationName.setImageResource(R.drawable.vito);
+				mImageOrganizationName.setImageResource(R.drawable.vito);
 			}
 			else if(collection.getIdentifier().contains("SPOT"))
 			{
-				imageOrganisationName.setImageResource(R.drawable.spotimage);
+				mImageOrganizationName.setImageResource(R.drawable.spotimage);
 			}
 			else if (collection.getIdentifier().contains("EUM")||(collection.getIdentifier().contains("EUMETSAT")))
 			{
-				imageOrganisationName.setImageResource(R.drawable.eumetsat);
+				mImageOrganizationName.setImageResource(R.drawable.eumetsat);
+			}
+			else if (collection.getIdentifier().contains("EGEOS"))
+			{
+				mImageOrganizationName.setImageResource(R.drawable.egeos);
 			}
 			else
 			{
-				//imageOrganisationName.setImageResource(Color.parseColor("#80000000"));
+			    mImageOrganizationName.setImageResource(Color.parseColor("#80000000"));
 			}
 		}
 		public TextView getButtonAddListCollection()
 		{
-			return mButtonAddListCollection;
+			return mButtonAddtoListCollection;
 		}
 		public TextView getButtonShowMetaData()
 		{

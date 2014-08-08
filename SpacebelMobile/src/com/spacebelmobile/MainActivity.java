@@ -10,12 +10,13 @@ import com.adapter.CustomInfoWindow;
 import com.adapter.CollectionListViewAdapter;
 import com.adapter.ProductAdapter;
 import com.databaseManagement.DatabaseHandler;
-import com.fragment.CityRaduisDialogFragment;
+import com.fragment.CityRadiusDialogFragment;
 import com.fragment.DatePickerFragment;
-import com.fragment.RaduisDialogFragment;
+import com.fragment.RadiusDialogFragment;
 import com.fragment.DatePickerFragment.OnCalendarChangedListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.drive.internal.QueryRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +38,6 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.interfaces.OnLocalisation;
-import com.interfaces.OnMetadaProduct;
 import com.model.CollectionEntry;
 import com.model.ProductEntry;
 import com.model.Pos;
@@ -68,10 +68,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
 import android.widget.AdapterView;
@@ -79,6 +81,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -117,26 +120,24 @@ OnDragListener
 	 */
 	private ListView mListViewProduct;//list of products
 	private LinearLayout mMapLayout;//map layout
-	private ArrayList<CollectionEntry>mListCollections=null;
+	private ArrayList<CollectionEntry>mListCollections=null;//List of collections
 	//Adapter
 	private CollectionListViewAdapter mCollectionAdapter;
 	private ProductAdapter mProductAdapter;
-	private TextView mStartdate,mEnddate;
+	private TextView mStartdate,mEnddate,mTotal;
 	private Button mSearch;
 	private boolean check=false;
-	private Button prev,next;
-	private Product products=new Product();
-
+	private ImageButton prev,next;
+	private Product product=new Product();
 	//date start and end date
-	ImageView startdateImgb,enddateImgb;
+	private ImageView startdateImgb,enddateImgb;
 	//boundingbox,location,city
-	RadioGroup buttonBySearch;
+	private RadioGroup buttonBySearch;
 	//queryMaker
-	QueryMaker queryMaker=new QueryMaker();
+	QueryMaker queryMaker;
 	Map<Marker, ProductEntry>MarkerEntry=new HashMap<Marker, ProductEntry>();
 	String collection;
-	//metadaproduct
-	OnMetadaProduct metadaProduct;
+	private String[] Cmd = {"Delete","Show Metadata"};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -145,22 +146,24 @@ OnDragListener
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#598e96")));
-		//url
-		Bundle bundle=getIntent().getExtras();
-		bundle.getSerializable("url");
+		//Query
+		queryMaker=new QueryMaker();
 		//list of collections
 		handler=new DatabaseHandler(this);
 		mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
+		
 		mListViewCollection=(ListView)findViewById(R.id.CollectionId);
+		registerForContextMenu(mListViewCollection);
 		mListViewProduct=(ListView)findViewById(R.id.listView1);
 		mMapLayout=(LinearLayout)findViewById(R.id.hidegoogleMap);
-        
+		
+		mTotal=(TextView)findViewById(R.id.countProduct);
 		ArrayList<String>listCollection=new ArrayList<String>();
 		for (CollectionEntry collectionEntry : mListCollections) {
 			listCollection.add(collectionEntry.getIdentifier());
-		
 		}
-		mListViewCollection.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listCollection));
+		ArrayAdapter< String>adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listCollection);
+		mListViewCollection.setAdapter(adapter);
 		mListViewCollection.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		mListViewCollection.setOnItemLongClickListener(new OnItemLongClickListener() 
 		{
@@ -176,12 +179,11 @@ OnDragListener
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						String item = (String) mListViewCollection.getItemAtPosition(position);
-						CollectionEntry collectionEntry=new CollectionEntry(item);
-						handler.deleteCollection(collectionEntry);
-						/*mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
+						handler.deleteCollection(item);
+					    mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
 						mCollectionAdapter.clear();
 						mCollectionAdapter.addAll(mListCollections);
-						mCollectionAdapter.notifyDataSetChanged();*/
+						mCollectionAdapter.notifyDataSetChanged();
 					}
 				});
 				dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -200,10 +202,10 @@ OnDragListener
 			{
 				collection = (String) mListViewCollection.getItemAtPosition(position);
 				Intent intent =new Intent(MainActivity.this,MetaDataCollectionActivity.class);
-				//Bundle bundle=new Bundle();
-				//bundle.putSerializable("collection", collection);
-				//intent.putExtras(bundle);
-				//startActivity(intent);
+				/*Bundle bundle=new Bundle();
+				bundle.putSerializable("collection", collection);
+				intent.putExtras(bundle);
+				startActivity(intent);*/
 			} 
 		});
 		//search choice
@@ -211,7 +213,7 @@ OnDragListener
 		buttonBySearch.setOnCheckedChangeListener(new OnCheckedChangeListener() 
 		{
 			//find the radiobutton by returned id
-			//box bounding 
+			//Bounding Box  
 			//adress
 			//location
 			@Override
@@ -219,30 +221,28 @@ OnDragListener
 				switch (checkedId) 
 				{
 				case R.id.radioButton1:
-					//visibleArea();
-					 ImageView drawable= (ImageView) findViewById(R.id.bboxImage);
-					 drawable.setVisibility(View.VISIBLE);
-					 BoundingView boundingView=new BoundingView(getApplicationContext(), googleMap);
-					 drawable.setOnTouchListener(boundingView);
-					 boundingView.setOnLatLongBounds(new OnLatLongBounds() {
-						
+					visibleArea();
+					/*ImageView drawable= (ImageView) findViewById(R.id.bboxImage);
+					drawable.setVisibility(View.VISIBLE);
+					BoundingView boundingView=new BoundingView(getApplicationContext(), googleMap);
+					drawable.setOnTouchListener(boundingView);
+					boundingView.setOnLatLongBounds(new OnLatLongBounds() {
 						@Override
 						public void setLatLngBegin(LatLng latLng) {
 							// TODO Auto-generated method stub
 							System.out.println(latLng);
 						}
-
 						@Override
 						public void setLatLngEnd(LatLng latLng) {
 							// TODO Auto-generated method stub
 							System.out.println("EndLatLong"+latLng);
 						}
 					});
-					 drawable.bringToFront();
+					drawable.bringToFront();*/
 					break;
 				case R.id.radioButton2:
 					final GPSTracker gps = new GPSTracker(MainActivity.this);
-					RaduisDialogFragment raduisDialogFragment=new RaduisDialogFragment();
+					RadiusDialogFragment raduisDialogFragment=new RadiusDialogFragment();
 					raduisDialogFragment.show(getSupportFragmentManager(),"Radius");
 					raduisDialogFragment.setListener(new OnLocalisation() 
 					{
@@ -268,7 +268,8 @@ OnDragListener
 								double latitude = gps.getLatitude();
 								double longitude = gps.getLongitude();
 								bound =Utils.createBBoxFromPointAndDistance(longitude, latitude, Double.parseDouble(raduis));
-								DrawCircle(new LatLng(latitude, longitude), raduis);
+								LatLng latLng=new LatLng(latitude, longitude);
+								DrawCircle(latLng, raduis);
 							}
 						}
 						@Override
@@ -278,7 +279,7 @@ OnDragListener
 					});
 					break;
 				case R.id.radioButton3:
-					CityRaduisDialogFragment adressDialogFragment=new CityRaduisDialogFragment();
+					CityRadiusDialogFragment adressDialogFragment=new CityRadiusDialogFragment();
 					adressDialogFragment.show(getSupportFragmentManager(),"CityRaduis");
 					adressDialogFragment.setListener(new OnLocalisation() {
 						@Override
@@ -298,17 +299,17 @@ OnDragListener
 					break;
 				}
 			}
-
 		});
-		//get next and previous button
-		next=(Button)findViewById(R.id.next);
-		prev=(Button)findViewById(R.id.prev);
-		prev.setVisibility(View.GONE);
+		//next and previous button
+		next=(ImageButton)findViewById(R.id.next);
+		prev=(ImageButton)findViewById(R.id.prev);
 		next.setVisibility(View.GONE);
-		//start date
+		prev.setVisibility(View.GONE);
+		//Start date
 		mStartdate=(TextView)findViewById(R.id.st);
 		startdateImgb=(ImageView)findViewById(R.id.imageView1);
-		startdateImgb.setOnClickListener(new OnClickListener() {
+		startdateImgb.setOnClickListener(new OnClickListener() 
+		{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -316,10 +317,11 @@ OnDragListener
 				displayCalendar(v);
 			}
 		});
-		//end date
+		//End date
 		mEnddate=(TextView)findViewById(R.id.ed);
 		enddateImgb=(ImageView)findViewById(R.id.imageView2);
-		enddateImgb.setOnClickListener(new OnClickListener() {
+		enddateImgb.setOnClickListener(new OnClickListener() 
+		{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -329,10 +331,8 @@ OnDragListener
 		});
 		//when we handle the search button
 		mSearch=(Button)findViewById(R.id.button1);
-		mSearch.setOnClickListener(new OnClickListener()
-		{
-			
-			@SuppressLint("SimpleDateFormat") @Override
+		mSearch.setOnClickListener(new OnClickListener(){
+			@Override
 			public void onClick(View v) 
 			{
 				// TODO Auto-generated method stub
@@ -340,23 +340,22 @@ OnDragListener
 				{
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					Date startDate = sdf.parse(mStartdate.getText().toString());
-					Date endDate = sdf.parse(mEnddate.getText().toString());
+					Date endDate = sdf.parse(  mEnddate.getText().toString());
 					if(startDate.compareTo(endDate)>0)
 					{
-						mEnddate.setError("EndDate must be greater than StartDate");
+						mEnddate.setError("End Date must be greater than Start Date");
 					}
 					else
 					{
-						mEnddate.setError(null);
 						queryMaker.add(Constant.HTTP_ACCEPT_PARAM,Constant.ATOM_MIME_TYPE);
 						queryMaker.add(Constant.PARENT_IDENTIFIER,collection);
-						queryMaker.add(Constant.START_DATE,mStartdate.getText().toString());
-						queryMaker.add(Constant.END_DATE,mEnddate.getText().toString());
+						queryMaker.add(Constant.START_DATE,mStartdate.getText().toString()+"T00:00:00Z");
+						queryMaker.add(Constant.END_DATE,mEnddate.getText().toString()+"T00:00:00Z");
 						queryMaker.add(Constant.BBOX_PARAM,bound);
 						queryMaker.add(Constant.RECORD_SCHEMA_PARAM,Constant.OM_RECORD_SCHEMA);
 						System.out.println(Constant.ENTRY_URL+queryMaker.getQuery().toString().trim());
-						new EntryTask(MainActivity.this).execute(Constant.ENTRY_URL+queryMaker.getQuery().toString());
-						queryMaker.Remove(); 
+					    new EntryTask(MainActivity.this).execute("http://geo.spacebel.be/opensearch/request/?httpAccept=application/atom%2Bxml&parentIdentifier=EOP:MDA-GSI:RSAT2_NRT&startRecord=1&maximumRecords=10&startDate=2009-01-01T00:00:00Z&endDate=2009-06-14T00:00:00Z&recordSchema=om");
+						queryMaker.Remove();
 					}
 				} 
 				catch (ParseException e) 
@@ -372,12 +371,11 @@ OnDragListener
 					int position, long id) {
 				// TODO Auto-generated method stub
 				ProductEntry product = (ProductEntry) mListViewProduct.getItemAtPosition(position);
-				Intent intent =new Intent(MainActivity.this,ProductDetailsActivity.class);
-			    metadaProduct.ShowMetada(product);
-				//Bundle bundle=new Bundle();
-			    //bundle.putSerializable("entry", product);
-			    //intent.putExtras(bundle);
-				startActivity(intent);
+				Intent intent =new Intent(MainActivity.this,ProductMetaDataActivity.class);
+				Bundle bundle=new Bundle();
+				bundle.putSerializable("entry", product);
+				intent.putExtras(bundle);
+				startActivity(intent);	
 			}
 		});
 		//next products to be display
@@ -386,7 +384,7 @@ OnDragListener
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new EntryTask(MainActivity.this).execute(products.getNext());
+				new EntryTask(MainActivity.this).execute(product.getNext());
 			}
 		});
 		prev.setOnClickListener(new OnClickListener()
@@ -394,7 +392,7 @@ OnDragListener
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new EntryTask(MainActivity.this).execute(products.getPrev());
+				new EntryTask(MainActivity.this).execute(product.getPrev());
 			}
 		});
 		// Loading map
@@ -404,18 +402,14 @@ OnDragListener
 			@Override
 			public void onCameraChange(CameraPosition position) {
 				// TODO Auto-generated method stub
-				//visibleArea();      
+				// visibleArea();      
 			}
 		});
 	}
-	public void setMetadaProduct(OnMetadaProduct onMetadaProduct)
-	{
-		metadaProduct=onMetadaProduct;
-	}
-	/**
+	 /**
 	 * 
 	 * @return
-	 */
+	 **/
 	public String visibleArea() 
 	{
 		// Get boundaries of the screen from the projection
@@ -426,11 +420,36 @@ OnDragListener
 		double south = bounds.latLngBounds.southwest.latitude;
 		double west = bounds.latLngBounds.southwest.longitude;
 		this.bound=west+","+south+","+ east+","+north;
-		//drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
+
+		drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
 		//googleMap.animateCamera(CameraUpdateFactory.zoomBy(ZOOM_OUT));
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
 		return bound;
 	}
+	final int CONTEXT_MENU_DELETE_ITEM =1;
+	 final int CONTEXT_MENU_UPDATE =2;
+	 @Override
+	 public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo) {
+	           
+	  menu.add(Menu.NONE, CONTEXT_MENU_DELETE_ITEM, Menu.NONE, "Delete");
+	  menu.add(Menu.NONE, CONTEXT_MENU_UPDATE, Menu.NONE, "update");
+	 }
+	 @Override
+	 public boolean onContextItemSelected(MenuItem item) {
+	 
+	      AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+	      Long id = ada.getItemId(info.position);/*what item was selected is ListView*/
+	 
+	      switch (item.getItemId()) {
+	              case CONTEXT_MENU_DELETE_ITEM:
+	                    //do smth
+	                   return(true);
+	             case CONTEXT_MENU_UPDATE:
+	                   //do smth else)
+	                   return(true);    
+	      }
+	  return(super.onOptionsItemSelected(item));
+	}	
 	//initialize the calendar dialog for choosen data
 	protected void displayCalendar(View v) 
 	{
@@ -526,12 +545,9 @@ OnDragListener
 			mCollectionAdapter.clear();
 			mCollectionAdapter.addAll(mListCollections);
 			mCollectionAdapter.notifyDataSetChanged();
-			Intent Intent=new Intent(MainActivity.this,PreferencesActivity.class);
-			startActivity(Intent);
+			Intent preferenceIntent=new Intent(MainActivity.this,PreferencesActivity.class);
+			startActivity(preferenceIntent);
 			break;
-		case R.id.action_collectionSearch:
-			Intent i=new Intent(MainActivity.this,CollectionSearchActivity.class);
-			startActivity(i);
 		case R.id.action_location_map:
 			mMapLayout.setVisibility(View.VISIBLE);
 			mListViewProduct.setVisibility(View.GONE);
@@ -555,9 +571,12 @@ OnDragListener
 	public void onMapLongClick(LatLng point) 
 	{
 		// TODO Auto-generated method stub
-		//clear the marker on the map
-		mProductAdapter.clear();
-		mProductAdapter.notifyDataSetChanged();
+		//clear the marker on the map and clear the list
+		if (mProductAdapter!=null)
+		{
+			mProductAdapter.clear();
+			mProductAdapter.notifyDataSetChanged();
+		}
 		googleMap.clear();
 		next.setVisibility(View.GONE);
 	}
@@ -568,7 +587,7 @@ OnDragListener
 		MarkerOptions markerOptions = new MarkerOptions();
 		// Setting latitude and longitude for the marker
 		markerOptions.position(point);
-		//setting marker icon bitmap
+		// setting marker icon bitmap
 		markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 		// Adding marker on the Google Map
 		Marker m=googleMap.addMarker(markerOptions);
@@ -591,56 +610,63 @@ OnDragListener
 				ProductEntry entry=feed.getEntries().get(i);
 				// Getting the latitude of the polygon center
 				lat = entry.getCenterOf().getLatitude();
-				// Getting the longitude of the polygon cente²r
+				// Getting the longitude of the polygon center
 				lng = entry.getCenterOf().getLongitude();
 				LatLng latLng=new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-				//drawing the polygon for each entry
-				PolygonOptions polygonOptions = new PolygonOptions();
-				//we get for each entry the polygon points
-				polygonOptions.addAll(getPolygon(entry));
-				polygonOptions.strokeColor(Color.RED);
-				polygonOptions.strokeWidth(3);
-				polygonOptions.fillColor(Color.TRANSPARENT);
-				//adding polygon to the map
-				googleMap.addPolygon(polygonOptions);
-				// Drawing marker on the map and get the marker
-				Marker m=drawMarker(latLng);
-				MarkerEntry.put(m, entry);
-				builder.include(m.getPosition());
-				Log.i("map",""+MarkerEntry.size());
-				//}
+				if (bounds.contains(latLng))
+				{
+					//drawing the polygon for each entry
+					PolygonOptions polygonOptions = new PolygonOptions();
+					//we get for each entry the polygon points
+					polygonOptions.addAll(getPolygon(entry));
+					polygonOptions.strokeColor(Color.RED);
+					polygonOptions.strokeWidth(3);
+					polygonOptions.fillColor(Color.TRANSPARENT);//0x7F00FF00
+					//adding polygon to the map
+					googleMap.addPolygon(polygonOptions);
+					// Drawing marker on the map and get the marker
+					Marker m=drawMarker(latLng);
+					MarkerEntry.put(m, entry);
+					builder.include(m.getPosition());
+					System.out.println("drawing");
+					Log.i("map",""+MarkerEntry.size());
+				}
 			}
 			//Then obtain a movement description object by using the factory: CameraUpdateFactory:
 			int padding = 0; // offset from edges of the map in pixels
 			CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 			//Finally move the map:
 			googleMap.moveCamera(cu);
+			
 			// Moving CameraPosition to last clicked position
+			//	googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))));
+			// Setting the zoom level in the map on last position  is clicked
+			//googleMap.animateCamera(CameraUpdateFactory.zoomTo(Float.parseFloat(zoom)));
 		}
 	}
-	//getting the polygon of each entry
+	// getting the polygon of each entry
 	public ArrayList<LatLng>getPolygon(ProductEntry entry)
 	{
 		ArrayList<LatLng> arrayPoints = new ArrayList<LatLng>();
-		for (int i=0;i<entry.getPolygon().size();i++)
+		for (int i=0;i<entry.getPos().size();i++)
 		{
-			Pos pos=entry.getPolygon().get(i);
+			Pos pos=entry.getPos().get(i);
 			LatLng latLng=new LatLng(Double.parseDouble(pos.getLatitude()), Double.parseDouble(pos.getLongitude()));
 			arrayPoints.add(latLng);
 		}
 		return arrayPoints;
 	}
-	//handled when we clicked on a marker on the map
+	// fired when we clicked a marker on the map
 	@Override
 	public void onInfoWindowClick(Marker marker) 
 	{
 		// TODO Auto-generated method stub
-		//getting the cliquable entry
+		// getting the cliquable entry
 		ProductEntry entry=MarkerEntry.get(marker);
-		Intent intent = new Intent(MainActivity.this, ProductDetailsActivity.class);
+		Intent intent = new Intent(MainActivity.this, ProductMetaDataActivity.class);
 		Bundle bundle = new Bundle();  
-		//bundle.putSerializable("entry", entry);
-		//intent.putExtras(bundle);
+		// bundle.putSerializable("entry", entry);
+		// intent.putExtras(bundle);
 		startActivity(intent);
 	}
 	@Override
@@ -648,11 +674,11 @@ OnDragListener
 	{
 		// TODO Auto-generated method stub
 		//visibleArea();
-
 	}
 	public void DrawCircle(LatLng point,String radius)
 	{
-		 CircleOptions circleOptions = new CircleOptions()
+		googleMap.clear();
+		CircleOptions circleOptions = new CircleOptions()
 		.center(point)   //set cenzoomter
 		.radius(Double.parseDouble(radius)*Constant.KM_TO_M)   //set radius in km
 		.fillColor(Color.TRANSPARENT)  //default
@@ -677,10 +703,10 @@ OnDragListener
 		.strokeWidth(5)
 		.strokeColor(Color.GREEN)
 		.fillColor(0x6600ff00));
-		left = (int)c1.latitude;
-		top = (int) c1.longitude;
+		left = 	(int)c1.latitude;
+		top = 	(int)c1.longitude;
 		right = (int)c3.latitude;
-		bottom = (int) c3.longitude;
+		bottom =(int)c3.longitude;
 		bound=""+bottom+","+right+","+top+","+left;
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
 		//Top left marker
@@ -699,7 +725,7 @@ OnDragListener
 		m3 = googleMap.addMarker(new MarkerOptions()
 		.position(c3)
 		.draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-		//Bottom right marker
+		//Bottom left marker
 		if (m4 != null) m4.remove();
 		m4 = googleMap.addMarker(new MarkerOptions()
 		.position(c4)
@@ -739,7 +765,11 @@ OnDragListener
 		// TODO Auto-generated method stub
 		return false;
 	}
-	//class for loading the query result
+	/**
+	 * 
+	 * @author mpo
+	 * this class implements
+	 */
 	private class EntryTask extends AsyncTask<String, Void, Product>
 	{
 		private Product feed=new Product();
@@ -759,15 +789,17 @@ OnDragListener
 			dialog.show();
 		}
 		@Override
-		protected void onPostExecute(Product result) {
+		protected void onPostExecute(Product result) 
+		{
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			//all data have been loaded ,we make the dialog disappear
-			if (dialog.isShowing()) {
+			if (dialog.isShowing()) 
+			{
 				dialog.dismiss();
 			}
-			products=result;
-			if (products.getEntries().size()==0)
+			product=result;
+			if (product.getEntries().size()==0)
 			{
 				next.setVisibility(View.GONE);
 				Toast.makeText(getApplicationContext(), "products are not found in this area", Toast.LENGTH_LONG).show();;
@@ -775,7 +807,7 @@ OnDragListener
 			else
 			{
 				//next products
-				if (products.getNext()==null)
+				if (product.getNext()==null)
 				{
 					next.setVisibility(View.GONE);
 				}
@@ -784,7 +816,7 @@ OnDragListener
 					next.setVisibility(View.VISIBLE);
 				}
 				//previous products
-				if (products.getPrev()==null)
+				if (product.getPrev()==null)
 				{
 					prev.setVisibility(View.GONE);
 				}
@@ -794,57 +826,58 @@ OnDragListener
 				}
 				queryMaker.Remove();
 				googleMap.clear();
-				drawFootPrints(products); //show products on the map
+				drawFootPrints(result); //show products on the map
+				mTotal.setText("totals :"+result.getTotalsResults());
 				//Add products in listview
-				mProductAdapter=new ProductAdapter(getApplicationContext(), products.getEntries());
+				mProductAdapter=new ProductAdapter(getApplicationContext(), product.getEntries());
 				mListViewProduct.setAdapter(mProductAdapter);
 				mProductAdapter.notifyDataSetChanged();
-				//products.setEntries(null);
 			}
 		}
 		@Override
-		protected Product doInBackground(String... urls) 
+		protected Product doInBackground(String...urls) 
 		{
 			// TODO Auto-generated method stub
 			//Loading all entries
 			feed=DataParser.parse(urls[0]);
 			//converting url to bitmap
-			for (ProductEntry entry : feed.getEntries()) {
+			for (ProductEntry entry : feed.getEntries()) 
+			{
 				//Parsing url-->Bitmap
 				String imageURLThumbnail = entry.getThumbnail();
 				//String imageURLQuickLook=entry.getQuicklook();
 				Bitmap bitmapTN = ImageDownloader.downloadAndShowImage(imageURLThumbnail);
 				//Bitmap bitmapQL = ImageDownloader.downloadAndShowImage(imageURLQuickLook);
-
-				//passing bitmap to the 
+				//passing bitmap to the product
 				entry.setBitmapThumbnail(bitmapTN);
 				//entry.setBitmapQuicklook(bitmapQL);
-				}
-				return feed;
 			}
+			return feed;
 		}
-		@Override
-		public void onLocationChanged(Location location) 
-		{
-			// TODO Auto-generated method stub
-			// Creating a LatLng object for the current location
-			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-			// Showing the current location in Google Map
-			googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-			// Zoom in the Google Map
-			googleMap.animateCamera(CameraUpdateFactory.zoomTo(8));
-		}
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-		}
-		@Override
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-		}
-		@Override
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-		}
-		
 	}
+	@Override
+	public void onLocationChanged(Location location) 
+	{
+		// TODO Auto-generated method stub
+		// Creating a LatLng object for the current location
+		// LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+		// Showing the current location in Google Map
+		// googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+		// Zoom in the Google Map
+		// googleMap.animateCamera(CameraUpdateFactory.zoomTo(8));
+	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		System.out.println("Enable");
+	}
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		System.out.println("Disable");
+	}
+}

@@ -28,18 +28,19 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class SearchCollectionsResultsActivity extends Activity implements onTaskCollectionComplete
+public class CollectionSearchResultsActivity extends Activity implements onTaskCollectionComplete
 {
 	private ListView listViewCollection;
 	private CollectionFeed collections=null;
-	CollectionSearchAdapter adapter;
-	Button prev,next;
-	DatabaseHandler handler;
-	TextView count;
-	@SuppressWarnings("unchecked")
+	private CollectionSearchAdapter adapter;
+	private ImageButton prev,next;
+	private DatabaseHandler handler;
+	private TextView count;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -47,7 +48,6 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 		setContentView(R.layout.activity_search_collections_results);
 		listViewCollection=(ListView)findViewById(R.id.listView1);
 		count=(TextView)findViewById(R.id.count);
-
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#598e96")));
 		//setting the database to save the chosen collection
 		handler=new  DatabaseHandler(this);
@@ -56,16 +56,16 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 		collections=(CollectionFeed)bundle.getSerializable("collections");
 		//passing data to the listview
 		adapter=new CollectionSearchAdapter(getApplicationContext(), collections.getCollectionEntries());
-		listViewCollection.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		adapter.setNotifyOnChange(true);
+		listViewCollection.setAdapter(adapter);
 		//counting the displayed data
 		count.setText("("+collections.getCollectionEntries().size()+")"  );
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		//buttons prev and nex
-		next=(Button)findViewById(R.id.next);
-		prev=(Button)findViewById(R.id.prev);
+		next=(ImageButton)findViewById(R.id.next);
+		prev=(ImageButton)findViewById(R.id.prev);
 		if (collections.getNext()==null)
 		{
 			next.setVisibility(View.GONE);
@@ -74,9 +74,12 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Log.i("previous", "previous");
 				if (collections.getPrevious()!=null)
-					new CollectionsTask(SearchCollectionsResultsActivity.this).execute(collections.getPrevious());
+					new CollectionsTask(CollectionSearchResultsActivity.this).execute(collections.getPrevious());
+				else
+				{
+					Toast.makeText(getApplicationContext(), "No previous Collection to load", Toast.LENGTH_LONG);
+				}
 			}
 		});
 		next.setOnClickListener(new OnClickListener() 
@@ -84,7 +87,13 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new CollectionsTask(SearchCollectionsResultsActivity.this).execute(collections.getNext());
+				if (collections.getNext()!=null)
+					new CollectionsTask(CollectionSearchResultsActivity.this).execute(collections.getNext());
+				else
+				{
+					System.out.println("null");
+					Toast.makeText(getApplicationContext(), "No next Collection to load", Toast.LENGTH_LONG);
+				}
 			}
 		});
 
@@ -93,7 +102,7 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 			@Override
 			public void addCollection(final CollectionEntry collection) {
 				// TODO Auto-generated method stub
-				AlertDialog.Builder dialog=new AlertDialog.Builder(SearchCollectionsResultsActivity.this);
+				AlertDialog.Builder dialog=new AlertDialog.Builder(CollectionSearchResultsActivity.this);
 				dialog.setTitle("Collection choice");
 				dialog.setMessage("Add this collection in your favourite list?");
 				dialog.setIcon(R.drawable.satellite);
@@ -125,7 +134,7 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 			@Override
 			public void showMetaData(CollectionEntry collection) {
 				// TODO Auto-generated method stub
-				Intent intent=new Intent(SearchCollectionsResultsActivity.this,MetaDataCollectionActivity.class);
+				Intent intent=new Intent(CollectionSearchResultsActivity.this,MetaDataCollectionActivity.class);
 				Bundle bundle=new Bundle();
 				bundle.putSerializable("collection", collection);
 				intent.putExtras(bundle);
@@ -174,7 +183,7 @@ public class SearchCollectionsResultsActivity extends Activity implements onTask
 		adapter.addAll(collections.getCollectionEntries());
 		adapter.notifyDataSetChanged();
 		this.collections=collections;
-		//Log.i("previous", collections.getPrevious());
+		
 	}
 	@Override
 	public void OnServerError() {

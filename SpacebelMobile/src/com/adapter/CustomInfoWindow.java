@@ -1,11 +1,9 @@
 package com.adapter;
 
-import java.security.acl.LastOwnerException;
 import java.util.Map;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.model.Marker;
 import com.model.ProductEntry;
 import com.spacebelmobile.R;
+import com.utils.Utils;
 /**
  * this class is used for implementing custom InfoWindow
  * @author mpo
@@ -58,11 +57,11 @@ public class CustomInfoWindow implements InfoWindowAdapter
 		
 		//set data in widgets
 		imageView.setImageBitmap(entry.getBitmapThumbnail());
-		title.setText(entry.getTitle());
+		title.setText(Utils.ParseCollectionIdentifier(entry.getTitle()));
 		shortname.setText(entry.getShortName());
 		
 		serialNumber.setText(entry.getSerialIdentifier());
-		instrumentShortName.setText(entry.getInstrumentShortName());
+		instrumentShortName.setText(entry.getShortName());
 		sensorResolution.setText(entry.getSensorResolution());
 		sensorType.setText(entry.getSensorType());
 		sensorMode.setText(entry.getSensorOperationalMode());
@@ -70,7 +69,7 @@ public class CustomInfoWindow implements InfoWindowAdapter
 		orbitDirection.setText(entry.getOrbitDirection());
 		lastorbitNumber.setText(entry.getLastOrbitreNumber());
 		orbitNumber.setText(entry.getOrbitNumber());
-		orbitType.setText(entry.getOrbiteType());
+		orbitType.setText(entry.getOrbitType());
 		
 		startDate.setText(entry.getStartDate().replaceAll("\\s", ""));
 		endDate.setText(entry.getEndDate().replaceAll("\\s", ""));

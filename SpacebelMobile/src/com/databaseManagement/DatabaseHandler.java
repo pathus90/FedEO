@@ -18,7 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
 	private static final int DATABASE_VERSION = 1;
 	//Database Name
 	private static final String DATABASE_NAME = "favouriteCollection";
-	//CollectionsTable table name
+	//CollectionTable table name
 	private static final String TABLE_COLLECTIONS = "collections";
 	//Collections Table Columns names
 	private static final String KEY_ID = "id";
@@ -127,16 +127,17 @@ public class DatabaseHandler extends SQLiteOpenHelper
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE, collection.getTitle());
 		values.put(KEY_IDENTIFIER, collection.getIdentifier());
-		
 		return db.update(TABLE_COLLECTIONS, values, KEY_ID + " = ?",
 				new String[] { String.valueOf(collection.getID()) });
 	}
 	// DELETE SINGLE COLLECTION FROM THE DATABASE
-	public void deleteCollection(CollectionEntry collection) 
+	public void deleteCollection(String item) 
 	{
+		System.out.println(item);
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_COLLECTIONS, KEY_ID + " = ?",
-				new String[] { String.valueOf(collection.getID()) });
+				new String[] { String.valueOf(item) });
+		System.out.println("delete");
 		db.close();
 	}
 	// RETURN THE NUMBER OF COLLECTION

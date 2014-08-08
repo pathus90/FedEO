@@ -7,10 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="6dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-         android:layout_marginBottom="6dp"
         android:background="@drawable/bg_dialog"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -26,16 +26,14 @@
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
-        
-
         <EditText
             android:id="@+id/raduis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:padding="4dp"
             android:hint="@string/raduis"
-            android:inputType="number" >
+            android:inputType="number"
+            android:padding="4dp" >
         </EditText>
 
         <Button
@@ -44,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="6dp"
-            android:padding="4dp"
             android:background="@drawable/bg_dialog_ok"
+            android:padding="4dp"
             android:text="@string/ok"
             android:textColor="@android:color/white" />
     </LinearLayout>

@@ -106,8 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal" >
-
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
@@ -116,7 +115,6 @@
                     android:hint=""
                     android:text="@string/EndDate"
                     android:textSize="15sp" />
-
                 <TextView
                     android:id="@+id/ed"
                     style="@android:style/Widget.EditText"
@@ -125,7 +123,6 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="0.34"
                     android:text="" />
-
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
@@ -169,20 +166,20 @@
 
                 <RadioButton
                     android:id="@+id/radioButton1"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/boundingbox" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="@string/location" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="@string/city" />
             </RadioGroup>
 
@@ -197,7 +194,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:background="#598e96"
                 android:text="@string/search"
                 android:textColor="#fff"
@@ -241,33 +238,37 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="36dp"
+            android:layout_gravity="bottom"
+            android:background="#598e96" >
 
-            <Button
-                android:id="@+id/Button01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:text="@string/prev"
-                android:visibility="gone" />
-
-            <Button
+            <ImageButton
                 android:id="@+id/next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:src="@drawable/righticon"
                 android:text="@string/next" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignTop="@+id/next"
+                android:src="@drawable/lefticon"
                 android:text="prev" />
+            
+            <TextView
+                android:id="@+id/countProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="315dp"
+                android:layout_toRightOf="@+id/prev"
+                android:text="" />
         </RelativeLayout>
     </FrameLayout>
 

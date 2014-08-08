@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +37,7 @@ class BoundingView extends ImageView implements OnTouchListener
 		switch(event.getAction()) 
 		{
 		case MotionEvent.ACTION_DOWN:
-			isDrawing = true; 
+			setDrawing(true); 
 			begin.x = (int) event.getX();
 			begin.y = (int) event.getY();
 			end.x = (int) event.getX();
@@ -47,14 +46,14 @@ class BoundingView extends ImageView implements OnTouchListener
 			invalidate(); 
 			break;
 		case MotionEvent.ACTION_MOVE:
-			isDrawing = true; 
+			setDrawing(true); 
 			end.x = (int) event.getX();
 			end.y = (int) event.getY();
 			latLongBounds.setLatLngEnd(map.getProjection().fromScreenLocation(end));
 			invalidate(); 
 			break;
 		case MotionEvent.ACTION_UP:
-			isDrawing = false; 
+			setDrawing(false); 
 			invalidate(); 
 			break;
 		}
@@ -70,15 +69,22 @@ class BoundingView extends ImageView implements OnTouchListener
 		p.setStyle(Paint.Style.STROKE); 
 		p.setStrokeWidth(4.5f);
 		// opacity
-		//p.setAlpha(0x80); //
+		p.setAlpha(0x80); 
 		canvas.drawRect(200, 30, 500, 500, p);
 	}
+	
 	public void setOnLatLongBounds(OnLatLongBounds latLongBounds)
 	{
 		this.latLongBounds=latLongBounds;
 	}
-    /*|******************************|
-      |         Inteface bbox        |
+    public boolean isDrawing() {
+		return isDrawing;
+	}
+	public void setDrawing(boolean isDrawing) {
+		this.isDrawing = isDrawing;
+	}
+	/*|******************************|
+      |********INTERFACE BBOX********|
 	  |******************************|*/
 	 public interface OnLatLongBounds
 	 {

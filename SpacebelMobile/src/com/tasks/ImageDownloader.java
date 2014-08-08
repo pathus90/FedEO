@@ -1,10 +1,7 @@
 package com.tasks;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -12,15 +9,9 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import com.spacebelmobile.R;
-import com.utils.Utils;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 
 public class ImageDownloader { 
 	/**
@@ -43,14 +34,13 @@ public class ImageDownloader {
 			// Set the default socket timeout (SO_TIMEOUT)
 			// in milliseconds which is the timeout for waiting for data.
 			HttpConnectionParams.setSoTimeout(httpParameters, 10000);
-
+			
 			final HttpClient client = new DefaultHttpClient(httpParameters);
 			final HttpResponse response = client.execute(new HttpGet(imageURL));
 			//Getting the response entity.
 			final HttpEntity entity = response.getEntity();
 			//Getting the input stream of the imae content.
 			final InputStream imageContentStream = entity.getContent();
-
 			//Decoding the image input stream using the 
 			//BitmapFactory and converting the InputStream into Bitmap.
 			imageBitmap = 

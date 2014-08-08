@@ -2,10 +2,13 @@ package com.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import android.R.array;
+
 /**
  * 
  * @author mpo
- *
+ * @version 1.0
  */
 public class CollectionEntry implements Serializable
 {
@@ -16,8 +19,8 @@ public class CollectionEntry implements Serializable
 	private String mIdentifier;
 	private String mAbstract;
 	private PointOfContact contact;
-	private String topicCategory;
-	// geenral information
+	private BoundingBox boundingBox;
+	// general information
 	private String metadataStandardName;
 	private String metadataStandardVersion;
 	private String dateStamp;
@@ -29,6 +32,8 @@ public class CollectionEntry implements Serializable
 	private String limiteConstraints;
 	private String AccesConstraints;
 	private String otherConstraints;
+	//category
+	private ArrayList<Category>categories=new ArrayList<Category>();
 	public CollectionEntry()
 	{
 		super();
@@ -185,17 +190,6 @@ public class CollectionEntry implements Serializable
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	public String getTopicCategory() {
-		return topicCategory;
-	}
-	public void setTopicCategory(String topicCategory) {
-		this.topicCategory = topicCategory;
-	}
-	@Override
-	public String toString() {
-		return "Collection [title=" + mTitle  + ", Date=" + mDate + ", identifier="
-				+ mIdentifier + ", Abstract=" + mAbstract + "]";
-	}
 	public String getLimiteConstraints() {
 		return limiteConstraints;
 	}
@@ -213,5 +207,22 @@ public class CollectionEntry implements Serializable
 	}
 	public void setOtherConstraints(String otherConstraints) {
 		this.otherConstraints = otherConstraints;
+	}
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+	}
+	@Override
+	public String toString() {
+		return "Collection [title=" + mTitle  + ", Date=" + mDate + ", identifier="
+				+ mIdentifier + ", Abstract=" + mAbstract + "]";
+	}
+	public ArrayList<Category> getCategories() {
+		return categories;
+	}
+	public void setCategories(ArrayList<Category> categories) {
+		this.categories = categories;
 	}
 }

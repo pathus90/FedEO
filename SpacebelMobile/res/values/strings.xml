@@ -60,7 +60,7 @@
     <string name="identifier">Identifier</string>
     <string name="bstract">Abstract</string>
     <string name="date_">Date :</string>
-    <string name="raduis">Radius</string>
+    <string name="raduis">Radius in km</string>
     <string name="city">City</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -82,5 +82,14 @@
     <string name="phone">Phone</string>
     <string name="searchTerms">Search Terms</string>
     <string name="subject">Subject</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_mission">MissionActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="title_activity_esamission">EsamissionActivity</string>
 
 </resources>

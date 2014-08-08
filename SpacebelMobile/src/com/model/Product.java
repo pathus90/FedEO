@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * 
  * @author mpo
- *
+ * @version 1.0
  */
 public class Product implements Serializable
 {
@@ -16,7 +16,6 @@ public class Product implements Serializable
 	/**
 	 * 
 	 */
-	
 	private String totalsResults;
 	private String name;
 	private String updated; 
@@ -52,10 +51,9 @@ public class Product implements Serializable
 		this.entries = entries;
 	}
 	public String getPrev() {
-		// TODO Auto-generated method stub
 		return prev;
 	}
-	public void setPrev(String prev)
+	public void setPrevious(String prev)
 	{
 		this.prev=prev;
 	}
@@ -69,7 +67,7 @@ public class Product implements Serializable
 	@Override
 	public String toString() 
 	{
-		return "Feed [totalsResults=" + totalsResults + ", name=" + name
+		return "totalsResults=" + totalsResults + ", name=" + name
 				+ ", updated=" + updated + ", entries=" + entries + "]";
 	}
 }

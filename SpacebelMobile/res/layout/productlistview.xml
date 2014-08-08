@@ -13,7 +13,7 @@
         android:layout_marginLeft="2dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="eeeeeeeeeeeeeeeee"
+        android:text=""
         android:textColor="#598e96"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -234,6 +234,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="#000" />
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout>*/
+
+    
 
 </LinearLayout>

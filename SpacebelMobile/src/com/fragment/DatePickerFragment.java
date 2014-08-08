@@ -30,7 +30,7 @@ DatePickerDialog.OnDateSetListener
 			mListener = (OnCalendarChangedListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
-					+ " must implement OnCalendarChangedListener");
+					+ "must implement OnCalendarChangedListener");
 		}
 	}
 	@Override

@@ -1,33 +1,33 @@
 package com.parsedata;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.util.Log;
-
-import com.google.android.gms.internal.bu;
+import com.model.BoundingBox;
+import com.model.Category;
 import com.model.CollectionFeed;
 import com.model.CollectionEntry;
-import com.model.KeyWord;
 import com.model.PointOfContact;
 
 public class CollectionHandler extends DefaultHandler
 {
 	//collection
-	CollectionFeed collection;
-	//list of entries
+	private CollectionFeed collection;
+	//list of collections
 	private ArrayList<CollectionEntry> mCollectionEntries;
 	//one collection
 	private CollectionEntry mCollectionEntry;
+	//contact
 	private PointOfContact mContact;
 	private boolean isContact;
+	//Bbox
+	private BoundingBox boundingBox;
+	private boolean isBoundingBox=false;
 
-	private KeyWord keyword;
-	private ArrayList<KeyWord> keywords;
+	private Category category;
+	private ArrayList<Category> keywords;
 	private boolean isKeyWord=false;
 
 	private StringBuffer buffer=null;
@@ -37,6 +37,7 @@ public class CollectionHandler extends DefaultHandler
 	private boolean isDateStamp=false;
 	private boolean isMetastandardName=false;
 	private boolean isMetaDataStandardVersion;
+
 	/**
 	 * 
 	 */
@@ -83,7 +84,17 @@ public class CollectionHandler extends DefaultHandler
 		{
 			collection=new CollectionFeed();
 			this.mCollectionEntries=new ArrayList<CollectionEntry>();
+			keywords=new ArrayList<Category>();
 			this.isfeed=true;
+		}
+		else if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("next"))
+		{
+			collection.setNext(attributes.getValue("href"));
+		}
+		else if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("previous"))
+		{ 
+			collection.setPrev(attributes.getValue("href"));
+			//Log.i("precedent", collection.getPrevious());
 		}
 		// Entry
 		else if (qName.equalsIgnoreCase("entry"))
@@ -97,14 +108,15 @@ public class CollectionHandler extends DefaultHandler
 			mContact=new PointOfContact();
 			isContact=true;
 		}
-		else if (qName.equalsIgnoreCase("gmd:MD_Keywords"))
+		else if (qName.equalsIgnoreCase("category"))
 		{
-			keywords=new ArrayList<KeyWord>();	
+			category=new Category();
+			category.setCategory(attributes.getValue("label"));	
+			keywords.add(category);
 		}
-		else if (qName.equalsIgnoreCase("gmd:keyword"))
+		else if (localName.equalsIgnoreCase("EX_GeographicBoundingBox"))
 		{
-			keyword=new KeyWord();
-			isKeyWord=true;
+			boundingBox=new BoundingBox();
 		}
 		else if(localName.equalsIgnoreCase("individualName"))
 		{
@@ -166,18 +178,11 @@ public class CollectionHandler extends DefaultHandler
 		{
 			isMetaDataStandardVersion=true;
 		}
-		if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("next"))
+		if (localName.equalsIgnoreCase("summary"))
 		{
-			collection.setNext(attributes.getValue("href"));
-		}
-		if(localName.equalsIgnoreCase("Link") && attributes.getValue("rel").equalsIgnoreCase("previous"))
-		{ 
-			collection.setPrev(attributes.getValue("href"));
+			//this.mCollectionEntry.setCategories(keywords);
 		}
 	}
-	/**
-	 * 
-	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException 
 	{
 		//we finish parsing the metaData
@@ -225,9 +230,16 @@ public class CollectionHandler extends DefaultHandler
 				this.buffer=null;
 			}
 		}
-		if (qName.equalsIgnoreCase("gco:CharacterString"))
+		if (qName.equalsIgnoreCase("category"))
 		{
-			//getting the abstract for the collection
+			if (isEntry)
+			{
+				this.keywords.add(category);
+			}
+		}
+		if (localName.equalsIgnoreCase("CharacterString"))
+		{
+			//getting the abstractName for the collection
 			if (isAbstract)
 			{
 				this.mCollectionEntry.setDescription(this.buffer.toString());
@@ -241,14 +253,12 @@ public class CollectionHandler extends DefaultHandler
 					this.mContact.setIndividualName(this.buffer.toString());
 					this.buffer=null;
 					PointOfContact.isIndividualName=false;	
-					
 				}
 				else if(PointOfContact.isOrganisation)
 				{
 					this.mContact.setOrganisation(this.buffer.toString());
 					this.buffer=null;
 					PointOfContact.isOrganisation=false;	
-					Log.i("tag", ""+mContact.getOrganisation());
 				}
 				else if(PointOfContact.isPositionName)
 				{
@@ -299,14 +309,6 @@ public class CollectionHandler extends DefaultHandler
 					PointOfContact.isEmail=false;	
 				}
 			}
-			//keyword
-			else if (isKeyWord)
-			{
-				//keyword.setKeyword(buffer.toString());
-				//keywords.add(keyword);
-				//Log.i("keyword",keyword.getKeyword());
-				isKeyWord=false;
-			}
 			else if (isMetastandardName)
 			{
 				this.mCollectionEntry.setMetadataStandardName(buffer.toString());
@@ -323,6 +325,11 @@ public class CollectionHandler extends DefaultHandler
 			this.mCollectionEntry.setContact(mContact);
 			isContact=false;
 		}
+		else if (localName.equalsIgnoreCase("EX_GeographicBoundingBox"))
+		{
+			this.mCollectionEntry.setBoundingBox(boundingBox);
+			isBoundingBox=false;
+		}
 		if (qName.equalsIgnoreCase("gco:Date"))
 		{
 			if (isDateStamp)
@@ -335,11 +342,8 @@ public class CollectionHandler extends DefaultHandler
 		{
 			this.mCollectionEntry.setLanguage(buffer.toString());
 		}
-		if (qName.equals("gmd:MD_Keywords"))
-		{
-			//this.mCollectionEntry.setKeyWords(keywords);
-			//keywords=null;
-		}
+
+
 	}
 	/**
 	 * 

@@ -1,10 +1,8 @@
 package com.adapter;
 import java.util.ArrayList;
-
 import com.model.ProductEntry;
 import com.spacebelmobile.R;
 import com.utils.Utils;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * class
+ * @author mpo
+ * @version 1.0
+ */
 public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 	private LayoutInflater  inflater;
-	@SuppressWarnings("unused")
 	private Context context;
 	private ArrayList<ProductEntry> products;
-
 	public ProductAdapter ( Context ctx,ArrayList<ProductEntry> objects) 
 	{
-		super( ctx,R.layout.productlistview, objects );
+		super( ctx,0, objects );
 		inflater = LayoutInflater.from( ctx );
 		context=ctx;
 		products=objects;
@@ -56,29 +56,33 @@ public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 	}
 	private  class Holder
 	{
-		TextView title,platformShortName,SensorResolutiion,startDate,endDate;
-		TextView orbittype;
-		TextView sensortype;
+		TextView title;
+		TextView platformShortName;
+		TextView sensorResolution;
+		TextView startDate;
+		TextView endDate;
+		TextView orbitType;
+		TextView sensorType;
 		TextView orbitNumber;	
 		TextView serialIdentifier;
 		TextView orbitDirection;
 		TextView instrumentShortName;
 		TextView sensorOperationMode;
-		TextView LastOrbitNumber;
+		TextView lastOrbitNumber;
 		ImageView productImage;
 		public Holder(View view)
 		{
 			title=(TextView)view.findViewById(R.id.ltitle);
 			productImage=(ImageView)view.findViewById(R.id.lbadge);
 			platformShortName=(TextView)view.findViewById(R.id.lsnippet);
-			orbittype=(TextView)view.findViewById(R.id.lorbiteType);
+			orbitType=(TextView)view.findViewById(R.id.lorbiteType);
 			serialIdentifier=(TextView)view.findViewById(R.id.lserialIdentifier);
 			orbitNumber=(TextView)view.findViewById(R.id.lOrbitNumber);
-			sensortype=(TextView)view.findViewById(R.id.lsensorType);
-			SensorResolutiion=(TextView)view.findViewById(R.id.lsensorResolution);
+			sensorType=(TextView)view.findViewById(R.id.lsensorType);
+			sensorResolution=(TextView)view.findViewById(R.id.lsensorResolution);
 			instrumentShortName=(TextView)view.findViewById(R.id.linstrumentShortName);
 			sensorOperationMode=(TextView)view.findViewById(R.id.lsensorOperationalMode);
-			LastOrbitNumber=(TextView)view.findViewById(R.id.llastOrbitNumber);
+			lastOrbitNumber=(TextView)view.findViewById(R.id.llastOrbitNumber);
 			orbitDirection=(TextView)view.findViewById(R.id.lorbitDirection);
 			startDate=(TextView)view.findViewById(R.id.lstartDate);
 			endDate=(TextView)view.findViewById(R.id.lendDate);
@@ -87,21 +91,18 @@ public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 		{
 			productImage.setImageBitmap(product.getBitmapThumbnail());
 			title.setText(Utils.ParseCollectionIdentifier(product.getTitle()));
-			
-			orbittype.setText(product.getOrbiteType());
-			sensortype.setText(product.getSensorType());
+			orbitType.setText(product.getOrbitType());
+			sensorType.setText(product.getSensorType());
 			orbitNumber.setText(product.getOrbitNumber());
 			serialIdentifier.setText(product.getSerialIdentifier());
-			
-			instrumentShortName.setText(product.getInstrumentShortName());
+			instrumentShortName.setText(product.getShortName());
 		    sensorOperationMode.setText(product.getSensorOperationalMode());
 		    orbitDirection.setText(product.getOrbitDirection());
-		    LastOrbitNumber.setText(product.getLastOrbitreNumber());
+		    lastOrbitNumber.setText(product.getLastOrbitreNumber());
 		    platformShortName.setText(product.getShortName());
-		    SensorResolutiion.setText(product.getSensorResolution());
+		    sensorResolution.setText(product.getSensorResolution());
 		    startDate.setText(product.getStartDate().replaceAll("\\s", ""));
 		    endDate.setText(product.getEndDate().replaceAll("\\s", ""));
-			
 		}
 	}
 }

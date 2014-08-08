@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -18,119 +16,11 @@ import org.xml.sax.XMLReader;
 
 import android.util.Log;
 
-import com.model.CollectionFeed;
-import com.model.CollectionEntry;
 import com.model.Product;
 
 public class DataParser 
 {
 	public static String Surl ="http://smaad.spacebel.be/opensearch/request/?";
-	public static CollectionFeed parseCollections(String url) 
-	{
-		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		SAXParser saxParser = null;
-		CollectionFeed collections = null;
-		URL Url=null;
-		try
-		{
-			saxParser=saxParserFactory.newSAXParser();
-		}
-		catch (ParserConfigurationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (SAXException e) {
-			e.printStackTrace();
-		}
-		try
-		{
-			Url=new URL(url);
-		}
-		catch(MalformedURLException e)
-		{
-			System.out.println("link error");
-		}
-		try
-		{
-			CollectionHandler handlerCollections = new CollectionHandler();
-			InputStream input=Url.openStream();
-			Reader reader=new InputStreamReader(input);
-			InputSource is=new InputSource(reader);
-			if (input==null)
-			{
-				System.out.println("erreur android,url null");
-			}
-			else
-			{
-				try {
-					saxParser.parse(is, handlerCollections);
-					collections = ((CollectionHandler)handlerCollections).getCollections();
-				} 
-				catch (IOException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return collections;
-	}
-	public static Product getEntries(String request) {
-		URL url=null;
-		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		SAXParser saxParser = null;
-		Product feed=new Product();
-		InputStream input = null;
-		try
-		{
-			saxParser=saxParserFactory.newSAXParser();
-		}
-		catch (ParserConfigurationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (SAXException e) {
-			e.printStackTrace();
-		}
-		try
-		{ 
-			String s=request.replaceAll("%2C", ",");
-			url=new URL(s);
-		}
-		catch(MalformedURLException e)
-		{
-			System.out.println("probleme avec le lien");
-		}
-		try
-		{
-			ProductHandler handler = new ProductHandler();
-			input=url.openStream();
-			Reader reader=new InputStreamReader(input);
-			InputSource is=new InputSource(reader);
-			if (input==null)
-			{
-				System.out.println("erreur android,url null");
-			}
-			else
-			{
-				saxParser.parse(is, handler);
-				feed=((ProductHandler)handler).getFeed();
-			}
-		}
-		catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("pas trouver lien");
-		}
-		return feed;
-	}
 	public static String ParseTemplate(String request)
 	{
 		URL url=null;
@@ -183,7 +73,8 @@ public class DataParser
 	public static Product parse(String is) 
 	{
         Product product = null;
-        try {
+        try 
+        {
             // create a XMLReader from SAXParser
             XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             // create a handler 
@@ -194,7 +85,8 @@ public class DataParser
             xmlReader.parse(new InputSource(new URL(is).openStream()));
             // get the target `Product`
             product = handler.getFeed();
-        } catch(Exception ex) 
+        } 
+        catch(Exception ex) 
         {
             Log.d("XML", "Parser: parse() failed");
         }

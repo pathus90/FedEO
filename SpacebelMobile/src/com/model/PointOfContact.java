@@ -1,8 +1,11 @@
 package com.model;
 
 import java.io.Serializable;
-
-
+/**
+ * 
+ * @author mpo
+ * @version 1.0
+ */
 public class PointOfContact implements Serializable
 {
 	/**

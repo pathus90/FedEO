@@ -33,7 +33,7 @@ public class Utils {
 	 * @param placesName
 	 * @return
 	 */
-	public static JSONObject getLocationFormGoogle(String placesName) 
+	public static JSONObject getLocationFromGoogle(String placesName) 
 	{
 		HttpGet httpGet = new HttpGet("http://maps.google.com/maps/api/geocode/json?address=" +placesName+"&ka&sensor=false");
 		HttpClient client = new DefaultHttpClient();
@@ -66,7 +66,6 @@ public class Utils {
 	 */
 	public static LatLng getLatLng(JSONObject jsonObject) 
 	{
-
 		Double lon = new Double(0);
 		Double lat = new Double(0);
 		try {
@@ -161,13 +160,18 @@ public class Utils {
 					entity.consumeContent();
 				}
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			// Could provide a more explicit error message for IOException or
 			// IllegalStateException
 			getRequest.abort();
 			Log.w("ImageDownloader", "Error while retrieving bitmap from " + url);
-		} finally {
-			if (client != null) {
+		}
+		finally 
+		{
+			if (client != null) 
+			{
 				client.close();
 			}
 		}
@@ -186,7 +190,7 @@ public class Utils {
 	 * 
 	 * @param center
 	 * @param halfWidth
-	 * @return
+	 * @return a rectangle  
 	 */
 	public static List<LatLng> createRectangle(LatLng center, double halfWidth) {
 	    return Arrays.asList(new LatLng(center.latitude - halfWidth, center.longitude - halfWidth),

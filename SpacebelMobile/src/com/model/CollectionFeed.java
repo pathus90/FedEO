@@ -2,7 +2,11 @@ package com.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author mpo
+ *
+ */
 public class CollectionFeed implements Serializable
 {
 	/**
@@ -15,7 +19,7 @@ public class CollectionFeed implements Serializable
 	
 	public CollectionFeed()
 	{
-		
+		super();
 	}
 
 	public String getNext() {
@@ -30,7 +34,9 @@ public class CollectionFeed implements Serializable
 		return previous;
 	}
 
-	public void setPrev(String previous) {
+	public void setPrev(String previous) 
+	{
+		this.previous=previous;
 	}
 
 	public ArrayList<CollectionEntry> getCollectionEntries() {

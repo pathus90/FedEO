@@ -19,7 +19,7 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 	public CollectionListViewAdapter(Context context,ArrayList<CollectionEntry>entries) 
 	{
 		// TODO Auto-generated constructor stub
-		super(context, R.layout.listviewadapter,entries);
+		super(context,0,entries);
 		this.entries=entries;
 		this.context=context;	
 	}

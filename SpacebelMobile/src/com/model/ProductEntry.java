@@ -10,29 +10,18 @@ import android.graphics.Bitmap;
  */
 public class ProductEntry implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4140023801030846331L;
-	/**
-	 * 
-	 */
+
+	private static final long serialVersionUID = 607473294731406930L;
 	private String id;
 	private String link;
 	private String published;
 	private String title;
-	//StartDate
-	private String StartDate;
-	private String EndDate;
 	private String updated;
-	//Acquisition
 	private String OrbitNumber;
 	private String OrbitDirection;
 	private String LastOrbitreNumber;
-	private String illuminationAzimuthAngle;
-	private String illuminationElevationAngle;
-	private String incidenceAngle;
-	//
+	private String StartDate;
+	private String EndDate;
 	private String ShortName;
 	private String SerialIdentifier;
 	private String OrbiteType;
@@ -46,7 +35,7 @@ public class ProductEntry implements Serializable
 	private String PolarisationChannels;
 	private String AntenaLookDirection;
 	private String MinimumIncidentAngle;
-	//image thumbnail        -
+	//image thumbnail
 	private String thumbnail;
 	private Bitmap bitmapThumbnail;
 	//imageQuickLook
@@ -59,52 +48,6 @@ public class ProductEntry implements Serializable
 	public ProductEntry()
 	{
 		super();
-	}
-	public ProductEntry(String id, String link, String published, String title,
-			String startDate, String endDate, String updated,
-			String orbitNumber, String orbitDirection,
-			String lastOrbitreNumber, String illuminationAzimuthAngle,
-			String illuminationElevationAngle, String incidenceAngle,
-			String shortName, String serialIdentifier, String orbiteType,
-			String instrumentShortName,String sensorType,
-			String sensorOperationalMode, String sensorResolution,
-			String swathIdentifier, String polarisationMode,
-			String polarisationChannels, String antenaLookDirection,
-			String minimumIncidentAngle, String thumbnail,
-			Bitmap bitmapThumbnail, Bitmap bitmapQuicklook, String quicklook,
-			ArrayList<Pos> pos, Pos centerOf) {
-		super();
-		this.id = id;
-		this.link = link;
-		this.published = published;
-		this.title = title;
-		StartDate = startDate;
-		EndDate = endDate;
-		this.updated = updated;
-		OrbitNumber = orbitNumber;
-		OrbitDirection = orbitDirection;
-		LastOrbitreNumber = lastOrbitreNumber;
-		this.illuminationAzimuthAngle = illuminationAzimuthAngle;
-		this.illuminationElevationAngle = illuminationElevationAngle;
-		this.incidenceAngle = incidenceAngle;
-		ShortName = shortName;
-		SerialIdentifier = serialIdentifier;
-		OrbiteType = orbiteType;
-		InstrumentShortName = instrumentShortName;
-		SensorType = sensorType;
-		SensorOperationalMode = sensorOperationalMode;
-		SensorResolution = sensorResolution;
-		SwathIdentifier = swathIdentifier;
-		PolarisationMode = polarisationMode;
-		PolarisationChannels = polarisationChannels;
-		AntenaLookDirection = antenaLookDirection;
-		MinimumIncidentAngle = minimumIncidentAngle;
-		this.thumbnail = thumbnail;
-		this.bitmapThumbnail = bitmapThumbnail;
-		this.bitmapQuicklook = bitmapQuicklook;
-		Quicklook = quicklook;
-		this.pos = pos;
-		this.centerOf = centerOf;
 	}
 	/**
 	 * 
@@ -160,18 +103,21 @@ public class ProductEntry implements Serializable
 		this.title = title;
 	}
 	/**
+	 * 
 	 * @return updated date
 	 */
 	public String getUpdated() {
 		return updated;
 	}
 	/**
+	 * 
 	 * @param updated
 	 */
 	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
 	/**
+	 * 
 	 * @return the orbit Number
 	 */
 	public String getOrbitNumber() {
@@ -258,7 +204,7 @@ public class ProductEntry implements Serializable
 	 * 
 	 * @return the Orbit Type
 	 */
-	public String getOrbiteType() {
+	public String getOrbitType() {
 		return OrbiteType;
 	}
 	/**
@@ -340,22 +286,6 @@ public class ProductEntry implements Serializable
 	public void setLastOrbitreNumber(String lastOrbitreNumber) {
 		LastOrbitreNumber = lastOrbitreNumber;
 	}
-	public void setIlluminationAzimuthAngle(String illuminationAzimuthAngle) {
-		this.illuminationAzimuthAngle = illuminationAzimuthAngle;
-	}
-	public String getIlluminationElevationAngle() {
-		return illuminationElevationAngle;
-	}
-	public void setIlluminationElevationAngle(String illuminationElevationAngle) {
-		this.illuminationElevationAngle = illuminationElevationAngle;
-	}
-	public String getIncidenceAngle() {
-		return incidenceAngle;
-	}
-	public void setIncidenceAngle(String incidenceAngle) {
-		this.incidenceAngle = incidenceAngle;
-	}
-
 	public String getPolarisationMode() {
 		return PolarisationMode;
 	}
@@ -404,10 +334,10 @@ public class ProductEntry implements Serializable
 	public void setQuicklook(String quicklook) {
 		Quicklook = quicklook;
 	}
-	public ArrayList<Pos> getPolygon() {
+	public ArrayList<Pos> getPos() {
 		return pos;
 	}
-	public void setPolygon(ArrayList<Pos> pos) {
+	public void setPos(ArrayList<Pos> pos) {
 		this.pos = pos;
 	}
 	public Pos getCenterOf() {
@@ -427,8 +357,5 @@ public class ProductEntry implements Serializable
 	}
 	public void setBitmapQuicklook(Bitmap bitmapQuicklook) {
 		this.bitmapQuicklook = bitmapQuicklook;
-	}
-	public String getIlluminationAzimuthAngle() {
-		return illuminationAzimuthAngle;
 	}
 }

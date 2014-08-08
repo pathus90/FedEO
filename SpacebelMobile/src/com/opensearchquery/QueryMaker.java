@@ -2,25 +2,39 @@ package com.opensearchquery;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
+/**
+ * 
+ * @author mpo
+ *
+ */
 public class QueryMaker
 {
+	
 	private String mAtomProductUrl;
 	private String mAtomCollectionUrl;
 	private String query="";
 	private String url;
 	public QueryMaker()
 	{
-	
 	}
 	public QueryMaker(String name, String value) 
 	{
 		enCodeQuery(name, value);
 	}
+	/**
+	 * 
+	 * @param name the name
+	 * @param value the value
+	 */
 	public void addFormat(String name, String value)
 	{
 		enCodeQuery(name, value);
 	}
+	/**
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void add(String name, String value) {
 		query += "&";
 		enCodeQuery(name, value);
@@ -32,7 +46,7 @@ public class QueryMaker
 			query += "=";
 			query += URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException ex) {
-			throw new RuntimeException("Encoding error");
+			System.out.println("error");
 		}
 	}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	public String getQuery() 
