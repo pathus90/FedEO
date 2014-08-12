@@ -1,8 +1,12 @@
 package com.adapter;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
+
 import com.model.CollectionEntry;
+import com.spacebelmobile.MainActivity;
 import com.spacebelmobile.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,11 +20,13 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 {
 	private ArrayList<CollectionEntry> entries;
 	private Context context;
+	private LayoutInflater inflater;
 	public CollectionListViewAdapter(Context context,ArrayList<CollectionEntry>entries) 
 	{
 		// TODO Auto-generated constructor stub
-		super(context,0,entries);
+		super(context,R.layout.listviewadapter,entries);
 		this.entries=entries;
+		inflater=LayoutInflater.from(context);
 		this.context=context;	
 	}
 	@Override
@@ -43,7 +49,6 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 		Holder holder;
 		if (view == null) 
 		{
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			view = inflater.inflate(R.layout.listviewadapter, null, false);
 			holder = new Holder(view);
 			view.setTag(holder);
@@ -62,7 +67,7 @@ public class CollectionListViewAdapter extends ArrayAdapter<CollectionEntry>
 		public Holder(View view)
 		{
 			mTitle=(TextView)view.findViewById(R.id.title);
-			mRadioBtn=(RadioButton)view.findViewById(R.id.radioButton1);
+			//mRadioBtn=(RadioButton)view.findViewById(R.id.radioButton1);
 		}
 		public void setEntry(CollectionEntry entry)
 		{

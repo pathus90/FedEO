@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="@drawable/list_selector" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -459,7 +460,7 @@
                         android:id="@+id/timeStamp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Timestamp"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip"
                         android:textStyle="normal" />
@@ -468,7 +469,7 @@
                         android:id="@+id/MSN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Metadata Standard Name"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip"
                         android:textStyle="normal" />
@@ -477,7 +478,7 @@
                         android:id="@+id/MSV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Metadata Standard Version"
+                        android:text=""
                         android:textColor="#000"
                         android:textSize="15dip"
                         android:textStyle="normal" />

@@ -3,6 +3,8 @@ import java.util.ArrayList;
 
 import com.model.CollectionEntry;
 import com.spacebelmobile.R;
+import com.utils.Constant;
+import com.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -111,9 +113,14 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 		public void setEntry(CollectionEntry collection)
 		{
 			mCollectionTitle.setText(collection.getTitle());
-			mIdentifier.setText(collection.getIdentifier());
-			mAbstractDescription.setText(collection.getDescription());
-			System.out.println(mCollectionTitle);
+			if (collection.getIdentifier().contains(Constant.COLLECTION_PREFIX))
+			{
+				mIdentifier.setText(Utils.ParseCollectionIdentifier(collection.getIdentifier()));
+			}
+			else
+			{
+				mIdentifier.setText(collection.getIdentifier());
+			}
 			if (collection.getIdentifier().contains("ESA"))
 			{
 				mImageOrganizationName.setImageResource(R.drawable.esa);
@@ -138,6 +145,7 @@ public class CollectionSearchAdapter extends ArrayAdapter<CollectionEntry>
 			{
 			    mImageOrganizationName.setImageResource(Color.parseColor("#80000000"));
 			}
+			mAbstractDescription.setText(collection.getDescription());
 		}
 		public TextView getButtonAddListCollection()
 		{

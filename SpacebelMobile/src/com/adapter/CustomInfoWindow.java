@@ -61,7 +61,7 @@ public class CustomInfoWindow implements InfoWindowAdapter
 		shortname.setText(entry.getShortName());
 		
 		serialNumber.setText(entry.getSerialIdentifier());
-		instrumentShortName.setText(entry.getShortName());
+		instrumentShortName.setText(entry.getInstrumentShortName());
 		sensorResolution.setText(entry.getSensorResolution());
 		sensorType.setText(entry.getSensorType());
 		sensorMode.setText(entry.getSensorOperationalMode());

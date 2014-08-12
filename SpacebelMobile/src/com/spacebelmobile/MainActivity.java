@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.adapter.CustomInfoWindow;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.interfaces.OnLocalisation;
 import com.model.CollectionEntry;
+import com.model.PolygonCenter;
 import com.model.ProductEntry;
 import com.model.Pos;
 import com.model.Product;
@@ -55,6 +57,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -151,20 +154,20 @@ OnDragListener
 		//list of collections
 		handler=new DatabaseHandler(this);
 		mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
-		
+
 		mListViewCollection=(ListView)findViewById(R.id.CollectionId);
 		registerForContextMenu(mListViewCollection);
 		mListViewProduct=(ListView)findViewById(R.id.listView1);
 		mMapLayout=(LinearLayout)findViewById(R.id.hidegoogleMap);
-		
+
 		mTotal=(TextView)findViewById(R.id.countProduct);
-		ArrayList<String>listCollection=new ArrayList<String>();
-		for (CollectionEntry collectionEntry : mListCollections) {
+		//ArrayList<String>listCollection=new ArrayList<String>();
+		/*for (CollectionEntry collectionEntry : mListCollections) {
 			listCollection.add(collectionEntry.getIdentifier());
-		}
-		ArrayAdapter< String>adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listCollection);
+		}*/
+		CollectionListViewAdapter adapter=new CollectionListViewAdapter(getApplicationContext(), mListCollections);//<String>(this, android.R.layout.simple_list_item_, listCollection);
 		mListViewCollection.setAdapter(adapter);
-		mListViewCollection.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		//mListViewCollection.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		mListViewCollection.setOnItemLongClickListener(new OnItemLongClickListener() 
 		{
 			@Override
@@ -180,7 +183,7 @@ OnDragListener
 					public void onClick(DialogInterface dialog, int which) {
 						String item = (String) mListViewCollection.getItemAtPosition(position);
 						handler.deleteCollection(item);
-					    mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
+						mListCollections=(ArrayList<CollectionEntry>) handler.getAllCollections();
 						mCollectionAdapter.clear();
 						mCollectionAdapter.addAll(mListCollections);
 						mCollectionAdapter.notifyDataSetChanged();
@@ -348,17 +351,17 @@ OnDragListener
 					else
 					{
 						queryMaker.add(Constant.HTTP_ACCEPT_PARAM,Constant.ATOM_MIME_TYPE);
-						queryMaker.add(Constant.PARENT_IDENTIFIER,collection);
+						//queryMaker.add(Constant.PARENT_IDENTIFIER,collection);
 						queryMaker.add(Constant.START_DATE,mStartdate.getText().toString()+"T00:00:00Z");
 						queryMaker.add(Constant.END_DATE,mEnddate.getText().toString()+"T00:00:00Z");
 						queryMaker.add(Constant.BBOX_PARAM,bound);
 						queryMaker.add(Constant.RECORD_SCHEMA_PARAM,Constant.OM_RECORD_SCHEMA);
-						System.out.println(Constant.ENTRY_URL+queryMaker.getQuery().toString().trim());
-					    new EntryTask(MainActivity.this).execute("http://geo.spacebel.be/opensearch/request/?httpAccept=application/atom%2Bxml&parentIdentifier=EOP:MDA-GSI:RSAT2_NRT&startRecord=1&maximumRecords=10&startDate=2009-01-01T00:00:00Z&endDate=2009-06-14T00:00:00Z&recordSchema=om");
+
+						new EntryTask(MainActivity.this).execute("http://geo.spacebel.be/opensearch/request/?httpAccept=application/atom%2Bxml&parentIdentifier=urn:eop:DLR:EOWEB:IRS-P6.LISS-IV.P-MONO&startDate=2000-08-01T00:00:00Z&endDate=2013-08-12T00:00:00Z&recordSchema=om");
 						queryMaker.Remove();
 					}
 				} 
-				catch (ParseException e) 
+				catch (ParseException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -406,7 +409,7 @@ OnDragListener
 			}
 		});
 	}
-	 /**
+	/**
 	 * 
 	 * @return
 	 **/
@@ -420,36 +423,43 @@ OnDragListener
 		double south = bounds.latLngBounds.southwest.latitude;
 		double west = bounds.latLngBounds.southwest.longitude;
 		this.bound=west+","+south+","+ east+","+north;
-
 		drawRect(bounds.farLeft, bounds.farRight, bounds.nearRight, bounds.nearLeft);
 		//googleMap.animateCamera(CameraUpdateFactory.zoomBy(ZOOM_OUT));
 		Toast.makeText(getApplicationContext(), bound, Toast.LENGTH_LONG).show();
 		return bound;
 	}
-	final int CONTEXT_MENU_DELETE_ITEM =1;
-	 final int CONTEXT_MENU_UPDATE =2;
-	 @Override
-	 public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo) {
-	           
-	  menu.add(Menu.NONE, CONTEXT_MENU_DELETE_ITEM, Menu.NONE, "Delete");
-	  menu.add(Menu.NONE, CONTEXT_MENU_UPDATE, Menu.NONE, "update");
-	 }
-	 @Override
-	 public boolean onContextItemSelected(MenuItem item) {
-	 
-	      AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-	      Long id = ada.getItemId(info.position);/*what item was selected is ListView*/
-	 
-	      switch (item.getItemId()) {
-	              case CONTEXT_MENU_DELETE_ITEM:
-	                    //do smth
-	                   return(true);
-	             case CONTEXT_MENU_UPDATE:
-	                   //do smth else)
-	                   return(true);    
-	      }
-	  return(super.onOptionsItemSelected(item));
-	}	
+	@Override 
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) 
+	{
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle("Select The Action");  
+		menu.add(0, v.getId(), 0, "Show MetaData");  
+		menu.add(0, v.getId(), 0, "Delete Collection"); 
+	}
+
+	@Override  
+	public boolean onContextItemSelected(MenuItem item)
+	{  
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		String number;
+		try
+		{
+		     //number=new CollectionListViewAdapter(this).numberList.get(info.position);
+			if(item.getTitle()=="Show MetaData")
+			{
+			}  
+			else if(item.getTitle()=="Delete Collection")
+			{
+			}  
+			else 
+			{return false;}  
+			return true;  
+		}
+		catch(Exception e)
+		{
+			return true;
+		}
+	}  
 	//initialize the calendar dialog for choosen data
 	protected void displayCalendar(View v) 
 	{
@@ -599,8 +609,7 @@ OnDragListener
 		// If we have entry already saved
 		if(feed.getEntries().size()!=0)
 		{
-			String lat = "";
-			String lng = "";
+			PolygonCenter center=new PolygonCenter();
 			LatLngBounds bounds=googleMap.getProjection().getVisibleRegion().latLngBounds;
 			LatLngBounds.Builder builder = new LatLngBounds.Builder();
 			// Iterating through all the locations stored in the entry
@@ -608,53 +617,37 @@ OnDragListener
 			{
 
 				ProductEntry entry=feed.getEntries().get(i);
-				// Getting the latitude of the polygon center
-				lat = entry.getCenterOf().getLatitude();
-				// Getting the longitude of the polygon center
-				lng = entry.getCenterOf().getLongitude();
-				LatLng latLng=new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-				if (bounds.contains(latLng))
-				{
-					//drawing the polygon for each entry
-					PolygonOptions polygonOptions = new PolygonOptions();
-					//we get for each entry the polygon points
-					polygonOptions.addAll(getPolygon(entry));
-					polygonOptions.strokeColor(Color.RED);
-					polygonOptions.strokeWidth(3);
-					polygonOptions.fillColor(Color.TRANSPARENT);//0x7F00FF00
-					//adding polygon to the map
-					googleMap.addPolygon(polygonOptions);
-					// Drawing marker on the map and get the marker
-					Marker m=drawMarker(latLng);
-					MarkerEntry.put(m, entry);
-					builder.include(m.getPosition());
-					System.out.println("drawing");
-					Log.i("map",""+MarkerEntry.size());
-				}
+				//getting the center of the polygon
+				LatLng latLng=center.getPolygonCenter(entry);
+
+				//drawing the polygon for each entry
+				PolygonOptions polygonOptions = new PolygonOptions();
+				//we get for each entry the polygon points
+				polygonOptions.addAll(center.getPolygon(entry));
+				polygonOptions.strokeColor(Color.RED);
+				polygonOptions.strokeWidth(3);
+				polygonOptions.fillColor(Color.TRANSPARENT);//0x7F00FF00
+				//adding polygon to the map
+				googleMap.addPolygon(polygonOptions);
+				// Drawing marker on the map and get the marker
+				Marker m=drawMarker(latLng);
+				MarkerEntry.put(m, entry);
+				builder.include(m.getPosition());
+				System.out.println("drawing");
+				Log.i("map",""+MarkerEntry.size());
+
 			}
 			//Then obtain a movement description object by using the factory: CameraUpdateFactory:
 			int padding = 0; // offset from edges of the map in pixels
 			CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 			//Finally move the map:
 			googleMap.moveCamera(cu);
-			
+
 			// Moving CameraPosition to last clicked position
 			//	googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))));
 			// Setting the zoom level in the map on last position  is clicked
 			//googleMap.animateCamera(CameraUpdateFactory.zoomTo(Float.parseFloat(zoom)));
 		}
-	}
-	// getting the polygon of each entry
-	public ArrayList<LatLng>getPolygon(ProductEntry entry)
-	{
-		ArrayList<LatLng> arrayPoints = new ArrayList<LatLng>();
-		for (int i=0;i<entry.getPos().size();i++)
-		{
-			Pos pos=entry.getPos().get(i);
-			LatLng latLng=new LatLng(Double.parseDouble(pos.getLatitude()), Double.parseDouble(pos.getLongitude()));
-			arrayPoints.add(latLng);
-		}
-		return arrayPoints;
 	}
 	// fired when we clicked a marker on the map
 	@Override

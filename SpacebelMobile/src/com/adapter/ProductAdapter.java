@@ -95,12 +95,13 @@ public class ProductAdapter extends ArrayAdapter<ProductEntry> {
 			sensorType.setText(product.getSensorType());
 			orbitNumber.setText(product.getOrbitNumber());
 			serialIdentifier.setText(product.getSerialIdentifier());
-			instrumentShortName.setText(product.getShortName());
+			instrumentShortName.setText(product.getInstrumentShortName());
 		    sensorOperationMode.setText(product.getSensorOperationalMode());
 		    orbitDirection.setText(product.getOrbitDirection());
 		    lastOrbitNumber.setText(product.getLastOrbitreNumber());
 		    platformShortName.setText(product.getShortName());
 		    sensorResolution.setText(product.getSensorResolution());
+		  
 		    startDate.setText(product.getStartDate().replaceAll("\\s", ""));
 		    endDate.setText(product.getEndDate().replaceAll("\\s", ""));
 		}

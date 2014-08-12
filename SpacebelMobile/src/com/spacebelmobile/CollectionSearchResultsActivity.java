@@ -183,11 +183,9 @@ public class CollectionSearchResultsActivity extends Activity implements onTaskC
 		adapter.addAll(collections.getCollectionEntries());
 		adapter.notifyDataSetChanged();
 		this.collections=collections;
-		
 	}
 	@Override
 	public void OnServerError() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 }

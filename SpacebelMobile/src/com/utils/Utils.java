@@ -186,17 +186,5 @@ public class Utils {
 	{
 		return identifier.substring(12);
 	}
-	/**
-	 * 
-	 * @param center
-	 * @param halfWidth
-	 * @return a rectangle  
-	 */
-	public static List<LatLng> createRectangle(LatLng center, double halfWidth) {
-	    return Arrays.asList(new LatLng(center.latitude - halfWidth, center.longitude - halfWidth),
-	            new LatLng(center.latitude - halfWidth, center.longitude + halfWidth),
-	            new LatLng(center.latitude + halfWidth, center.longitude + halfWidth),
-	            new LatLng(center.latitude + halfWidth, center.longitude - halfWidth),
-	            new LatLng(center.latitude - halfWidth, center.longitude - halfWidth));
-	}
+
 }

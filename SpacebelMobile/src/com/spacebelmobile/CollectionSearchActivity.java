@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ OnCalendarChangedListener
 	private EditText keyword,organisationName,title,subject,startDate,endDate,eoplatform,instrument;
 	private LinearLayout optionLayout;
 	private Button searchButton;
+	private ImageButton next,prev;
 	private QueryMaker queryMaker;
 	private CheckBox displayOption;
 	private ListView listViewCollection;
@@ -68,7 +70,7 @@ OnCalendarChangedListener
 		searchButton=(Button)findViewById(R.id.find);
 		/*ListView*/
 		listViewCollection = (ListView)findViewById(R.id.CollectionListView);
-		
+
 		//Database
 		handler=new  DatabaseHandler(this);
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#598e96")));
@@ -131,6 +133,7 @@ OnCalendarChangedListener
 			}
 		});
 	}
+	
 	/**
 	 * Loading all collection
 	 * 
@@ -200,7 +203,7 @@ OnCalendarChangedListener
 		}
 		//queryMaker.Remove();
 	}
-	
+
 	public void OnServerError() 
 	{
 		// TODO Auto-generated method stub

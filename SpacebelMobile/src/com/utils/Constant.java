@@ -81,7 +81,5 @@ public class Constant {
 	public static int KM_TO_M = 1000;
 	
 	/*URL*/
-	public static String ENTRY_URL="http://smaad.spacebel.be/opensearch/request/?";
-	
+	public static String ENTRY_URL="http://smaad.spacebel.be/opensearch/request/?";	
 }
-
